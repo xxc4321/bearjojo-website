@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>零售营运 × 项目逻辑 × AI 自动化</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: { feishuBlue: "#3370ff", vitalityGold: "#ffb800" },
+          fontFamily: { sans: ["Inter", "PingFang SC", "Microsoft YaHei", "sans-serif"] },
+          boxShadow: { panel: "0 0 0 1px rgba(255,255,255,0.08), 0 16px 50px rgba(0,0,0,0.4)" }
+        }
+      }
+    };
+  </script>
+</head>
+<body class="antialiased">
+  <div id="root"></div>
+
+  <script src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
+  <script src="https://unpkg.com/framer-motion@11.11.17/dist/framer-motion.js"></script>
+
+  <script>
+  (function () {
+    const e = React.createElement;
+    const { motion, useScroll, useTransform } = window.Motion;
+
+    // ─── 翻译字典 ────────────────────────────────────────────
+    const i18n = {
+      zh: {
+        heroTitle: "零售营运 × 项目逻辑 × AI 自动化",
+        heroDesc: "8年以上英国市场实战经验。擅长以"项目逻辑"拆解零售痛点，通过数字化工具实现业务标准化与自动化落地。",
+        profileLabel: "个人简介",
+        metrics: [
+          { value: "£48.5W", label: "单店月营收峰值" },
+          { value: "300%", label: "点货效率提升" },
+          { value: "MBA", label: "英国班戈大学工商管理硕士" }
+        ],
+        tagsLabel: "个人标签",
+        tags: ["新零售数字化推手", "SOP 标准化专家", "AI 提效先行者"],
+        coreTitle: "核心竞争力矩阵",
+        competencies: [
+          { title: "数字化架构", desc: "深耕飞书多维表格与 AI 工具链，将复杂零售业务流程自动化，实现管理降维。" },
+          { title: "卓越营运管理", desc: "8年以上英国市场经验，擅长 P&L 利润穿透与精细化损耗治理，单店营收峰值达 £48.5W。" },
+          { title: "品牌出海落地", desc: "具备从 0 到 1 的新店筹建（NSO）实战经验，跑通英国本地法律、证照及跨文化团队协作。" }
+        ],
+        workTitle: "数字化实战作品",
+        workProjectTitle: "零售数字化增效：智能点货系统",
+        workBadges: ["300% 效率跃升", "50% 准确率增长", "零成本上手"],
+        demoPlaceholder: "系统演示（建设中）",
+        techStackLabel: "技术工具",
+        techStack: [
+          { name: "飞书多维表格 (Bitable)", icon: "🗂️" },
+          { name: "AI 辅助业务 (Cursor/Vibe Coding)", icon: "🤖" },
+          { name: "PMP 项目管理逻辑", icon: "📐" },
+          { name: "精细化损耗治理", icon: "🛡️" }
+        ],
+        keyInfo: "关键信息:",
+        experienceItems: [
+          { id: "popmart-uk", title: "泡泡玛特英国 | 店长", period: "2024.06-至今",
+            bullets: ["业绩: 2025年10月营收峰值 £48.5W，全年营收约 3,700W RMB 。", "数字化: 自研"智能点货系统"，提升效率 3 倍，准确率提升 50% 。"] },
+          { id: "h2t-ltd", title: "H2T LTD | 项目经理", period: "2021.09-2024.03",
+            bullets: ["成就: 主导商业空间装修项目，前置化设计运营动线，实现 100% 按期交付 。"] },
+          { id: "wf-esports-uk", title: "网鱼网咖英国 | 品牌出海落地", period: "2018.06-2021",
+            bullets: ["履历: 主导网鱼网咖英国多店筹建，独立跑通选址、证照审批及本地合规流程。", "体系: 建立标准化 SOP 执行框架，为后续门店复制与运营稳定性提供基础。"] }
+        ]
+      },
+      en: {
+        heroTitle: "Retail Ops × Project Logic × AI Automation",
+        heroDesc: "8+ years of hands-on experience in the UK market. Breaking down retail challenges with a project management mindset and driving standardization through digital tools.",
+        profileLabel: "PROFILE OVERVIEW",
+        metrics: [
+          { value: "£485K", label: "Peak Monthly Revenue" },
+          { value: "300%", label: "Inventory Efficiency ↑" },
+          { value: "MBA", label: "Bangor University, Wales" }
+        ],
+        tagsLabel: "About Tags",
+        tags: ["New Retail Digitalization", "SOP Standardization Expert", "AI Efficiency Pioneer"],
+        coreTitle: "Core Competencies",
+        competencies: [
+          { title: "Digital Architecture", desc: "Leveraging Feishu Bitable and AI toolchains to automate complex retail workflows and reduce management overhead." },
+          { title: "Operations Excellence", desc: "8+ years in the UK market, specializing in P&L analysis and shrinkage control. Peak single-store revenue: £485K/month." },
+          { title: "Brand Overseas Expansion", desc: "End-to-end new store opening (NSO) experience, navigating UK legal requirements, licensing, and cross-cultural team management." }
+        ],
+        workTitle: "Digital Work Showcase",
+        workProjectTitle: "Smart Inventory System: Retail Digitalization",
+        workBadges: ["300% Efficiency Gain", "50% Accuracy Improvement", "Zero Learning Curve"],
+        demoPlaceholder: "SYSTEM DEMO PLACEHOLDER",
+        techStackLabel: "Tech Stack",
+        techStack: [
+          { name: "Feishu Bitable", icon: "🗂️" },
+          { name: "AI-Assisted Dev (Cursor)", icon: "🤖" },
+          { name: "PMP Project Logic", icon: "📐" },
+          { name: "Precision Shrinkage Control", icon: "🛡️" }
+        ],
+        keyInfo: "Key Highlights:",
+        experienceItems: [
+          { id: "popmart-uk", title: "Pop Mart UK | Store Manager", period: "2024.06–Present",
+            bullets: ["Performance: Peak monthly revenue £485K (Oct 2025), annual revenue ~£3.7M.", "Digitalization: Built in-house Smart Inventory System — 3× efficiency, 50% accuracy improvement."] },
+          { id: "h2t-ltd", title: "H2T LTD | Project Manager", period: "2021.09–2024.03",
+            bullets: ["Achievement: Led commercial fit-out projects with pre-designed workflows, achieving 100% on-time delivery."] },
+          { id: "wf-esports-uk", title: "Wanyoo UK | Brand Overseas Expansion", period: "2018.06–2021",
+            bullets: ["Background: Led multi-location rollout for Wanyoo UK, managing site selection, licensing, and local compliance.", "System: Built a standardized SOP framework as the foundation for scalable, stable operations."] }
+        ]
+      }
+    };
+
+    const experienceBackgrounds = [
+      { type: "image", src: "img/ppmt.png" },
+      { type: "image", src: "img/H2T.png" },
+      { type: "image", src: "img/wanyoopng.png" }
+    ];
+
+    // ─── Panel ───────────────────────────────────────────────
+    function Panel({ children, className, isDark }) {
+      className = className || "";
+      isDark = isDark !== false;
+      return e("div", {
+        className: "rounded-2xl backdrop-blur-sm " +
+          (isDark
+            ? "border border-white/10 bg-white/[0.03] shadow-panel "
+            : "border border-black/10 bg-white shadow-[0_4px_24px_rgba(0,0,0,0.08)] ") +
+          className
+      }, children);
+    }
+
+    // ─── TimelineConnector ───────────────────────────────────
+    function TimelineConnector({ height, scrollYProgress, start, end, attach }) {
+      attach = attach || "bottom";
+      const scaleY = useTransform(scrollYProgress, [start, end], [0, 1]);
+      if (height <= 0) return null;
+      return e(motion.div, {
+        className: "pointer-events-none absolute left-1/2 z-0 w-[2px] -translate-x-1/2 rounded-full " +
+          "bg-gradient-to-b from-white/30 via-blue-500/75 to-white/20 shadow-[0_0_12px_rgba(51,112,255,0.35)] " +
+          (attach === "bottom" ? "top-full origin-top" : "bottom-full origin-bottom"),
+        style: { height: height + "px", scaleY }
+      });
+    }
+
+    // ─── App ─────────────────────────────────────────────────
+    function App() {
+      const [lang, setLang] = React.useState("zh");
+      const [isDark, setIsDark] = React.useState(true);
+      const heroSectionRef = React.useRef(null);
+      const pageScrollRef = React.useRef(null);
+      const experienceRootRef = React.useRef(null);
+      const experienceStartRef = React.useRef(null);
+      const experienceSectionRefs = React.useRef([]);
+      const experienceCardRefs = React.useRef([]);
+      const experienceScrollLockRef = React.useRef(false);
+      const [lineHeights, setLineHeights] = React.useState([]);
+
+      const t = i18n[lang];
+
+      const tc = {
+        textBase:  isDark ? "text-slate-100" : "text-gray-900",
+        textSub:   isDark ? "text-slate-300" : "text-gray-700",
+        textDim:   isDark ? "text-slate-400" : "text-gray-500",
+        textWhite: isDark ? "text-white"      : "text-gray-900",
+        cardBg:    isDark ? "bg-black/30"     : "bg-white",
+        cardBorder: isDark ? "border-white/10" : "border-black/10",
+        compBg:    isDark ? "bg-white/[0.04]" : "bg-white",
+        expCardBg: isDark ? "bg-black/40"     : "bg-white/90",
+        expCardBorder: isDark ? "border-white/15" : "border-black/10"
+      };
+
+      const btnStyle = {
+        backgroundColor: isDark ? "rgba(0,0,0,0.55)" : "#1a1a1a",
+        borderColor:     isDark ? "rgba(255,255,255,0.2)" : "transparent",
+        color:           isDark ? "#ffffff" : "#FFD100"
+      };
+
+      const { scrollYProgress } = useScroll({
+        container: pageScrollRef,
+        target: experienceRootRef,
+        offset: ["start end", "end start"]
+      });
+
+      React.useEffect(function () {
+        function updateLineHeights() {
+          var nextHeights = [];
+          for (var i = 0; i < experienceCardRefs.current.length - 1; i++) {
+            var cur = experienceCardRefs.current[i];
+            var nxt = experienceCardRefs.current[i + 1];
+            if (!cur || !nxt) continue;
+            nextHeights[i] = Math.max(0, nxt.getBoundingClientRect().top - cur.getBoundingClientRect().bottom);
+          }
+          setLineHeights(nextHeights);
+        }
+        updateLineHeights();
+        window.requestAnimationFrame(updateLineHeights);
+        window.setTimeout(updateLineHeights, 120);
+        window.addEventListener("resize", updateLineHeights);
+        return function () { window.removeEventListener("resize", updateLineHeights); };
+      }, []);
+
+      function handleHeroToExperienceWheel(event) {
+        if (!heroSectionRef.current || !experienceStartRef.current || experienceScrollLockRef.current) return;
+        if (event.deltaY <= 0) return;
+        if (heroSectionRef.current.getBoundingClientRect().bottom > window.innerHeight + 4) return;
+        event.preventDefault();
+        experienceScrollLockRef.current = true;
+        window.setTimeout(function () { experienceStartRef.current.scrollIntoView({ behavior: "smooth", block: "start" }); }, 120);
+        window.setTimeout(function () { experienceScrollLockRef.current = false; }, 950);
+      }
+
+      function handleExperienceWheel(event) {
+        if (!experienceSectionRefs.current.length || experienceScrollLockRef.current) return;
+        var viewportCenter = window.innerHeight / 2;
+        var currentIndex = 0, nearestDistance = Infinity;
+        experienceSectionRefs.current.forEach(function (section, index) {
+          if (!section) return;
+          var rect = section.getBoundingClientRect();
+          var dist = Math.abs(rect.top + rect.height / 2 - viewportCenter);
+          if (dist < nearestDistance) { nearestDistance = dist; currentIndex = index; }
+        });
+        var nextIndex = Math.max(0, Math.min(experienceSectionRefs.current.length - 1, currentIndex + (event.deltaY > 0 ? 1 : -1)));
+        if (nextIndex === currentIndex) return;
+        event.preventDefault();
+        experienceScrollLockRef.current = true;
+        var target = experienceSectionRefs.current[nextIndex];
+        if (target) window.setTimeout(function () { target.scrollIntoView({ behavior: "smooth", block: "start" }); }, 120);
+        window.setTimeout(function () { experienceScrollLockRef.current = false; }, 950);
+      }
+
+      // ── 右上角按钮 ──
+      var buttons = e("div", { className: "fixed top-4 right-4 z-50 flex items-center gap-2" },
+        e("button", {
+          onClick: function () { setLang(function (l) { return l === "zh" ? "en" : "zh"; }); },
+          style: btnStyle,
+          className: "h-9 w-9 rounded-full border backdrop-blur-sm text-xs font-bold hover:scale-110 transition-transform duration-200 select-none",
+          title: lang === "zh" ? "Switch to English" : "切换为中文"
+        }, lang === "zh" ? "EN" : "中"),
+        e("button", {
+          onClick: function () { setIsDark(function (d) { return !d; }); },
+          style: { backgroundColor: btnStyle.backgroundColor, borderColor: btnStyle.borderColor },
+          className: "h-9 w-9 rounded-full border backdrop-blur-sm text-base hover:scale-110 transition-transform duration-200 flex items-center justify-center select-none",
+          title: isDark ? "切换为日间模式" : "切换为夜间模式"
+        }, isDark ? "☀️" : "🌙")
+      );
+
+      // ── Hero Section ──
+      var heroSection = e("section", {
+        ref: heroSectionRef,
+        onWheel: handleHeroToExperienceWheel,
+        className: "relative snap-start snap-always min-h-screen"
+      },
+        e("div", { className: "pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_20%_10%,rgba(51,112,255,0.2),transparent_35%),radial-gradient(circle_at_90%_0%,rgba(255,184,0,0.15),transparent_28%)]" }),
+        e("main", { className: "relative mx-auto w-full max-w-6xl px-4 py-10 sm:px-6 lg:px-8" },
+
+          // Profile row
+          e(motion.section, { initial: { opacity: 0, y: 24 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6 }, className: "grid gap-6 lg:grid-cols-[320px,1fr]" },
+            e(Panel, { className: "p-6", isDark },
+              e("div", { className: "mx-auto mb-6 h-52 w-52 rounded-full bg-gradient-to-br from-feishuBlue via-violet-500 to-vitalityGold p-[3px]" },
+                e("div", { className: "h-full w-full overflow-hidden rounded-full bg-[#0f1117]" },
+                  e("img", { src: "img/avatar.png", alt: "个人头像", className: "h-full w-full object-cover object-[center_16%]" })
+                )
+              ),
+              e("p", { className: "text-center text-2xl font-bold tracking-wide " + tc.textWhite }, "Joe Xie")
+            ),
+            e(Panel, { className: "p-6 sm:p-8", isDark },
+              e("div", { className: "mb-5 inline-flex rounded-full border border-feishuBlue/40 bg-feishuBlue/10 px-4 py-1.5 text-xs font-medium text-blue-200" }, t.profileLabel),
+              e("h1", { className: "text-3xl font-extrabold leading-tight " + tc.textWhite + " sm:text-4xl lg:text-5xl" }, t.heroTitle),
+              e("p", { className: "mt-4 max-w-3xl text-sm leading-7 " + tc.textSub + " sm:text-base" }, t.heroDesc),
+              e("div", { className: "mt-6 grid gap-3 sm:grid-cols-3" },
+                t.metrics.map(function (item) {
+                  return e("div", { key: item.value, className: "rounded-xl border " + tc.cardBorder + " " + tc.cardBg + " p-4" },
+                    e("div", { className: "text-2xl font-bold text-vitalityGold" }, item.value),
+                    e("div", { className: "mt-1 text-xs " + tc.textDim }, item.label)
+                  );
+                })
+              )
+            )
+          ),
+
+          // Tags
+          e(motion.section, { initial: { opacity: 0, y: 20 }, animate: { opacity: 1, y: 0 }, transition: { duration: 0.6, delay: 0.15 }, className: "mt-6" },
+            e(Panel, { className: "p-6 sm:p-8", isDark },
+              e("h2", { className: "mb-4 text-sm font-semibold uppercase tracking-[0.2em] " + tc.textDim }, t.tagsLabel),
+              e("div", { className: "flex flex-wrap gap-3" },
+                t.tags.map(function (tag) {
+                  return e("span", { key: tag, className: "rounded-full border border-feishuBlue/30 bg-feishuBlue/10 px-4 py-2 text-sm text-blue-100" }, tag);
+                })
+              )
+            )
+          ),
+
+          // Core competencies
+          e(motion.section, { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.5 }, viewport: { amount: 0.2 }, className: "mt-6" },
+            e("h2", { className: "mb-6 text-xl font-bold " + tc.textWhite + " sm:text-2xl" }, t.coreTitle),
+            e("div", { className: "grid gap-4 md:grid-cols-3" },
+              t.competencies.map(function (item) {
+                return e("div", { key: item.title, className: "rounded-2xl border " + tc.cardBorder + " " + tc.compBg + " p-6 backdrop-blur-xl transition-transform duration-300 hover:scale-[1.02]" },
+                  e("h3", { className: "text-xl font-semibold text-feishuBlue" }, item.title),
+                  e("p", { className: "mt-3 text-sm leading-7 " + tc.textSub + " sm:text-base" }, item.desc)
+                );
+              })
+            )
+          ),
+
+          // Digital work
+          e(motion.section, { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: 0.08 }, viewport: { amount: 0.2 }, className: "mt-10" },
+            e("h2", { className: "mb-5 text-xl font-bold " + tc.textWhite + " sm:text-2xl" }, t.workTitle),
+            e("div", { className: "grid gap-5 rounded-2xl border " + tc.cardBorder + " " + tc.compBg + " p-5 backdrop-blur-xl transition-transform duration-300 hover:scale-[1.01] md:grid-cols-[1.1fr,1fr] md:p-7" },
+              e("div", { className: "flex min-h-44 items-center justify-center rounded-xl border border-dashed " + tc.cardBorder + " " + tc.cardBg + " text-sm tracking-[0.14em] " + tc.textDim }, t.demoPlaceholder),
+              e("div", null,
+                e("h3", { className: "text-2xl font-bold " + tc.textWhite + " sm:text-3xl" }, t.workProjectTitle),
+                e("div", { className: "mt-5 flex flex-wrap gap-2 text-sm sm:text-base" },
+                  t.workBadges.map(function (text, i) {
+                    var darkCls = ["border-feishuBlue/30 bg-feishuBlue/10 text-blue-100", "border-vitalityGold/30 bg-vitalityGold/10 text-yellow-100", "border-white/20 bg-white/10 text-slate-100"];
+                    var lightCls = ["border-feishuBlue/40 bg-feishuBlue/10 text-feishuBlue", "border-yellow-600/40 bg-yellow-100 text-yellow-800", "border-gray-300 bg-gray-100 text-gray-700"];
+                    return e("span", { key: text, className: "rounded-full border px-3 py-1.5 " + (isDark ? darkCls[i] : lightCls[i]) }, text);
+                  })
+                )
+              )
+            )
+          ),
+
+          // Tech stack
+          e(motion.section, { initial: { opacity: 0, y: 20 }, whileInView: { opacity: 1, y: 0 }, transition: { duration: 0.5, delay: 0.12 }, viewport: { amount: 0.2 }, className: "mt-10" },
+            e(Panel, { className: "p-6 sm:p-8", isDark },
+              e("h2", { className: "mb-4 text-sm font-semibold uppercase tracking-[0.2em] " + tc.textDim }, t.techStackLabel),
+              e("div", { className: "grid gap-3 sm:grid-cols-2" },
+                t.techStack.map(function (tool) {
+                  return e("div", { key: tool.name, className: "flex items-center gap-3 rounded-xl border " + tc.cardBorder + " " + tc.cardBg + " px-4 py-3 text-sm " + tc.textSub + " transition-transform duration-300 hover:scale-[1.02]" },
+                    e("span", { className: "grid h-8 w-8 place-items-center rounded-lg border " + tc.cardBorder + " bg-white/10 text-base" }, tool.icon),
+                    e("span", null, tool.name)
+                  );
+                })
+              )
+            )
+          )
+        )
+      );
+
+      // ── Experience Timeline ──
+      var timeline = e("div", { ref: experienceRootRef, className: "relative", onWheel: handleExperienceWheel },
+        t.experienceItems.map(function (item, index) {
+          var bg = experienceBackgrounds[index];
+          return e("section", {
+            key: item.id,
+            ref: function (el) {
+              experienceSectionRefs.current[index] = el;
+              if (index === 0) experienceStartRef.current = el;
+            },
+            className: "relative h-screen w-screen shrink-0 snap-start snap-always"
+          },
+            e("div", { className: "absolute inset-0 z-0 h-full w-full" },
+              bg.type === "video"
+                ? e("video", { className: "absolute inset-0 h-full w-full object-cover", src: bg.src, autoPlay: true, muted: true, loop: true, playsInline: true })
+                : e("img", { className: "absolute inset-0 h-full w-full object-cover", src: bg.src, alt: "" }),
+              e("div", { className: "absolute inset-0 bg-black/65" })
+            ),
+            e("div", { className: "relative z-10 h-full" },
+              e("div", { className: "h-full w-full" },
+                e(motion.article, {
+                  ref: function (el) { experienceCardRefs.current[index] = el; },
+                  initial: { opacity: 0, x: -36 },
+                  whileInView: { opacity: 1, x: 0 },
+                  transition: { duration: 0.55 },
+                  viewport: { amount: 0.55 },
+                  className: "absolute left-20 top-1/2 z-20 w-[min(86vw,40rem)] -translate-y-1/2 rounded-2xl border " + tc.expCardBorder + " " + tc.expCardBg + " p-6 shadow-[0_0_24px_rgba(51,112,255,0.2)] backdrop-blur-xl sm:left-24 sm:w-[min(38vw,40rem)] sm:p-8 lg:left-28"
+                },
+                  e("div", { className: "pointer-events-none absolute left-1/2 -translate-x-1/2 " + (index === 0 ? "bottom-0 translate-y-1/2" : "top-0 -translate-y-1/2") },
+                    index === 0 && e(motion.span, {
+                      className: "absolute left-1/2 top-1/2 block h-8 w-8 -translate-x-1/2 -translate-y-1/2 rounded-full bg-feishuBlue/25",
+                      animate: { scale: [1, 1.25, 1], opacity: [0.25, 0.5, 0.25] },
+                      transition: { duration: 2.2, repeat: Infinity, ease: "easeInOut" }
+                    }),
+                    e(motion.span, {
+                      className: "relative block h-4 w-4 rounded-full border border-white/70 bg-white/40",
+                      whileInView: { backgroundColor: "#3370ff", scale: [1, 1.28, 1] },
+                      transition: { duration: 0.6 },
+                      viewport: { amount: 0.65 }
+                    })
+                  ),
+                  index > 0 && e(TimelineConnector, { height: lineHeights[index - 1] || 0, scrollYProgress: scrollYProgress, start: (index - 1) / t.experienceItems.length, end: index / t.experienceItems.length, attach: "top" }),
+                  index < t.experienceItems.length - 1 && e(TimelineConnector, { height: lineHeights[index] || 0, scrollYProgress: scrollYProgress, start: index / t.experienceItems.length, end: (index + 1) / t.experienceItems.length, attach: "bottom" }),
+                  e("h2", { className: "text-3xl font-bold text-white sm:text-4xl" }, item.title),
+                  e("p", { className: "mt-3 text-base font-medium text-vitalityGold sm:text-lg" }, item.period),
+                  e("div", { className: "mt-5 text-base font-semibold text-slate-200 sm:text-lg" }, t.keyInfo),
+                  e("ul", { className: "mt-3 space-y-2 text-base leading-8 text-slate-100 sm:text-lg" },
+                    item.bullets.map(function (bullet) {
+                      return e("li", { key: bullet, className: "flex gap-2" },
+                        e("span", { className: "mt-2 h-1.5 w-1.5 shrink-0 rounded-full bg-feishuBlue" }),
+                        e("span", null, bullet)
+                      );
+                    })
+                  )
+                )
+              )
+            )
+          );
+        })
+      );
+
+      return e("div", {
+        ref: pageScrollRef,
+        style: { backgroundColor: isDark ? "#0a0a0a" : "#FFD100" },
+        className: "h-screen overflow-y-auto snap-y snap-mandatory scroll-smooth overflow-x-hidden " + tc.textBase
+      }, buttons, heroSection, timeline);
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(e(App, null));
+  })();
+  </script>
+</body>
+</html>
