@@ -382,8 +382,27 @@
       transform: scale(1.05);
     }
 
+    /* Profile Wrapper */
+    .profile-wrapper {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
     /* Responsive */
     @media (min-width: 768px) {
+      .profile-wrapper {
+        display: grid;
+        grid-template-columns: 300px 1fr;
+        gap: 1.5rem;
+        align-items: flex-start;
+      }
+
+      .profile-card {
+        padding: 2rem 1.5rem;
+        min-height: auto;
+      }
+
       .content {
         padding: 3rem 2rem;
       }
@@ -422,15 +441,17 @@
 
     <!-- Main Content -->
     <div class="content">
-      <!-- Profile Card -->
-      <div class="card profile-card">
-        <img src="img/avatar.png" alt="Joe Xie" class="avatar">
-        <div class="profile-name">Joe Xie</div>
-      </div>
+      <!-- Profile Wrapper -->
+      <div class="profile-wrapper">
+        <!-- Profile Card -->
+        <div class="card profile-card">
+          <img src="img/avatar.png" alt="Joe Xie" class="avatar">
+          <div class="profile-name">Joe Xie</div>
+        </div>
 
-      <!-- Profile Overview -->
-      <div class="card">
-        <div class="badge">PROFILE OVERVIEW</div>
+        <!-- Profile Overview -->
+        <div class="card">
+          <div class="badge">PROFILE OVERVIEW</div>
         <h1 class="section-title">
           零售营运 <span class="title-highlight">×</span> 项目逻辑 <span class="title-highlight gold">×</span> AI 自动化
         </h1>
@@ -453,6 +474,7 @@
             <div class="metric-label">英国班戈大学工商管理硕士</div>
           </div>
         </div>
+      </div>
       </div>
 
       <!-- Tags Section -->
