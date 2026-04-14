@@ -7,223 +7,565 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
-  <script src="https://cdn.tailwindcss.com"></script>
-  <script>
-    tailwind.config = {
-      theme: {
-        extend: {
-          colors: {
-            primaryBg: "#0a0a0a",
-            feishuBlue: "#3370ff",
-            vitalityGold: "#ffb800"
-          },
-          fontFamily: {
-            sans: ["Inter", "PingFang SC", "Microsoft YaHei", "sans-serif"]
-          },
-          boxShadow: {
-            panel: "0 0 0 1px rgba(255,255,255,0.08), 0 16px 50px rgba(0,0,0,0.4)"
-          }
-        }
-      }
-    };
-  </script>
   <style>
-    * { box-sizing: border-box; }
-    body { scroll-behavior: smooth; }
-    .experience-cards { display: flex; gap: 1rem; overflow-x: auto; padding: 1rem 0; }
-    .experience-card { flex-shrink: 0; width: 120px; height: 500px; border-radius: 1rem; overflow: hidden; cursor: pointer; position: relative; background-size: cover; background-position: center; transition: width 0.5s ease; }
-    .experience-card.active { width: 400px; }
-    .experience-card::after { content: ''; position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.9), rgba(0,0,0,0.4), transparent); pointer-events: none; }
-    .experience-info { position: absolute; bottom: 0; left: 0; right: 0; padding: 1.5rem; color: white; z-index: 2; }
-    .experience-card .bullets { display: none; max-height: 0; overflow: hidden; opacity: 0; transition: opacity 0.3s ease 0.2s, max-height 0.3s ease 0.2s; }
-    .experience-card.active .bullets { display: block; max-height: 200px; opacity: 1; transition: opacity 0.3s ease, max-height 0.3s ease; }
-    @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-    .fade-in { animation: fadeInUp 0.6s ease-out forwards; }
-    .fade-in-delay-1 { animation-delay: 0.1s; } .fade-in-delay-2 { animation-delay: 0.2s; } .fade-in-delay-3 { animation-delay: 0.3s; } .fade-in-delay-4 { animation-delay: 0.4s; }
-    @keyframes slideIn { from { opacity: 0; transform: scale(0.9); } to { opacity: 1; transform: scale(1); } }
-    .hero-image { animation: slideIn 0.8s ease-out; }
-    .metric-card:hover { border-color: rgba(51, 112, 255, 0.5); transform: translateY(-5px); }
-    .skill-card:hover { border-color: rgba(51, 112, 255, 0.5); transform: scale(1.05); }
-    .interactive-link { transition: all 0.3s ease; }
-    .interactive-link:hover { transform: scale(1.05); }
-    .tag { animation: fadeInUp 0.6s ease-out forwards; }
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --primary-bg: #0a0a0a;
+      --feishu-blue: #3370ff;
+      --vitality-gold: #ffb800;
+      --card-border: rgba(255, 255, 255, 0.1);
+      --card-bg: rgba(255, 255, 255, 0.03);
+      --text-primary: #ffffff;
+      --text-secondary: #a0aec0;
+      --text-tertiary: #64748b;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      background-color: var(--primary-bg);
+      color: var(--text-primary);
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", sans-serif;
+      line-height: 1.6;
+      font-size: 16px;
+    }
+
+    .container {
+      max-width: 100%;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* Header */
+    header {
+      padding: 1.5rem;
+      background: rgba(0, 0, 0, 0.3);
+      border-bottom: 1px solid var(--card-border);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+
+    .header-nav {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 100%;
+    }
+
+    .logo {
+      font-weight: 700;
+      font-size: 1.25rem;
+      letter-spacing: 0.05em;
+    }
+
+    /* Main Content */
+    .content {
+      padding: 1.5rem;
+      flex: 1;
+    }
+
+    /* Card Styles */
+    .card {
+      background: var(--card-bg);
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+      backdrop-filter: blur(10px);
+      transition: all 0.3s ease;
+    }
+
+    .card:hover {
+      border-color: var(--feishu-blue);
+      background: rgba(51, 112, 255, 0.05);
+    }
+
+    /* Profile Card */
+    .profile-card {
+      text-align: center;
+      padding: 2rem 1.5rem;
+    }
+
+    .avatar {
+      width: 140px;
+      height: 140px;
+      border-radius: 50%;
+      margin: 0 auto 1.5rem;
+      object-fit: cover;
+      border: 3px solid var(--feishu-blue);
+      box-shadow: 0 0 30px rgba(51, 112, 255, 0.3);
+    }
+
+    .profile-name {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    /* Badge/Label */
+    .badge {
+      display: inline-block;
+      background: rgba(51, 112, 255, 0.15);
+      border: 1px solid rgba(51, 112, 255, 0.3);
+      color: #60a5fa;
+      padding: 0.4rem 1rem;
+      border-radius: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 1rem;
+    }
+
+    /* Title */
+    .section-title {
+      font-size: 1.75rem;
+      font-weight: 700;
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+      word-wrap: break-word;
+    }
+
+    .title-highlight {
+      color: var(--feishu-blue);
+    }
+
+    .title-highlight.gold {
+      color: var(--vitality-gold);
+    }
+
+    /* Description */
+    .description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      line-height: 1.7;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Metrics Grid */
+    .metrics-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 0;
+    }
+
+    .metric-item {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: var(--vitality-gold);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--text-tertiary);
+    }
+
+    /* Tags */
+    .tags-section {
+      margin-bottom: 1rem;
+    }
+
+    .tags-label {
+      font-size: 0.75rem;
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      color: var(--text-tertiary);
+      margin-bottom: 1rem;
+      font-weight: 600;
+    }
+
+    .tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+    }
+
+    .tag {
+      background: rgba(51, 112, 255, 0.1);
+      border: 1px solid rgba(51, 112, 255, 0.3);
+      color: #60a5fa;
+      padding: 0.5rem 1rem;
+      border-radius: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    /* Competencies */
+    .competencies {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .competency-item {
+      background: rgba(51, 112, 255, 0.08);
+      border: 1px solid rgba(51, 112, 255, 0.2);
+      border-radius: 0.75rem;
+      padding: 1.25rem;
+    }
+
+    .competency-title {
+      color: var(--feishu-blue);
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-bottom: 0.75rem;
+    }
+
+    .competency-desc {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.6;
+    }
+
+    /* Work Section */
+    .work-card {
+      background: linear-gradient(135deg, rgba(51, 112, 255, 0.1), rgba(255, 184, 0, 0.05));
+      border: 1px solid var(--card-border);
+      border-radius: 1.25rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .work-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      margin-bottom: 1rem;
+    }
+
+    .work-badge {
+      background: rgba(255, 184, 0, 0.15);
+      border: 1px solid rgba(255, 184, 0, 0.3);
+      color: #fcd34d;
+      padding: 0.4rem 0.8rem;
+      border-radius: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .work-title {
+      font-size: 1.25rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .work-demo {
+      background: rgba(0, 0, 0, 0.2);
+      border: 2px dashed var(--card-border);
+      border-radius: 0.75rem;
+      padding: 2rem 1rem;
+      text-align: center;
+      color: var(--text-tertiary);
+      font-size: 0.9rem;
+      letter-spacing: 0.05em;
+      margin-bottom: 1.5rem;
+    }
+
+    /* Tech Stack */
+    .tech-stack {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 0.75rem;
+    }
+
+    .tech-item {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: rgba(0, 0, 0, 0.1);
+      border: 1px solid var(--card-border);
+      border-radius: 0.65rem;
+      padding: 0.9rem;
+      font-size: 0.9rem;
+    }
+
+    .tech-icon {
+      font-size: 1.25rem;
+      flex-shrink: 0;
+    }
+
+    /* Experience Cards */
+    .experience-section {
+      margin-bottom: 1rem;
+    }
+
+    .experience-card {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--card-border);
+      border-radius: 1rem;
+      padding: 1.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .exp-period {
+      color: var(--vitality-gold);
+      font-size: 0.85rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.75rem;
+    }
+
+    .exp-bullets {
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      line-height: 1.7;
+    }
+
+    .exp-bullets li {
+      margin-left: 1.5rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .exp-bullets .bullet-icon {
+      color: var(--feishu-blue);
+      margin-right: 0.5rem;
+    }
+
+    /* Footer */
+    footer {
+      padding: 2rem 1.5rem;
+      text-align: center;
+      border-top: 1px solid var(--card-border);
+      color: var(--text-tertiary);
+      font-size: 0.85rem;
+    }
+
+    .footer-button {
+      background: var(--feishu-blue);
+      color: white;
+      border: none;
+      padding: 0.8rem 1.5rem;
+      border-radius: 2rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-bottom: 1.5rem;
+    }
+
+    .footer-button:hover {
+      background: rgba(51, 112, 255, 0.8);
+      transform: scale(1.05);
+    }
+
+    /* Responsive */
+    @media (min-width: 768px) {
+      .content {
+        padding: 3rem 2rem;
+      }
+
+      .card {
+        padding: 2rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .metrics-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .competencies {
+        grid-template-columns: repeat(3, 1fr);
+      }
+
+      .tech-stack {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
   </style>
 </head>
-<body class="bg-primaryBg text-slate-100 antialiased">
-  <!-- Header -->
-  <header class="fixed top-0 left-0 right-0 z-50 transition-all duration-300">
-    <div class="max-w-6xl mx-auto px-6 py-4 flex justify-between items-center">
-      <div class="text-xl font-bold tracking-tight">BearJojo</div>
-      <nav class="hidden md:flex gap-8 text-sm text-slate-400">
-        <a href="#about" class="hover:text-white transition-colors">About</a>
-        <a href="#experience" class="hover:text-white transition-colors">Experience</a>
-        <a href="#skills" class="hover:text-white transition-colors">Skills</a>
-        <a href="#contact" class="hover:text-white transition-colors">Contact</a>
-      </nav>
-    </div>
-  </header>
-
-  <!-- Hero Section -->
-  <section class="min-h-screen flex items-center justify-center px-6 pt-20">
-    <div class="max-w-4xl text-center">
-      <img 
-        src="img/avatar.png" 
-        alt="Avatar"
-        class="hero-image w-32 h-32 rounded-full mx-auto mb-8 object-cover border-2 border-slate-700"
-      />
-      
-      <h1 class="fade-in text-4xl md:text-6xl font-bold mb-6 leading-tight">
-        零售营运 <span class="text-feishuBlue">×</span> 项目逻辑 <span class="text-vitalityGold">×</span> AI 自动化
-      </h1>
-      
-      <div class="flex flex-wrap justify-center gap-3 mb-10">
-        <span class="tag fade-in-delay-1 px-4 py-2 bg-white/5 rounded-full text-sm text-slate-300 border border-white/10">新零售数字化推手</span>
-        <span class="tag fade-in-delay-2 px-4 py-2 bg-white/5 rounded-full text-sm text-slate-300 border border-white/10">SOP 标准化专家</span>
-        <span class="tag fade-in-delay-3 px-4 py-2 bg-white/5 rounded-full text-sm text-slate-300 border border-white/10">AI 提效先行者</span>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <header>
+      <div class="header-nav">
+        <div class="logo">BearJojo</div>
+        <nav style="display: none;">Menu</nav>
       </div>
-    </div>
-  </section>
+    </header>
 
-  <!-- Metrics Section -->
-  <section class="py-20 px-6">
-    <div class="max-w-4xl mx-auto">
-      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <div class="metric-card fade-in-delay-1 bg-white/5 rounded-2xl p-8 text-center border border-white/10 transition-all duration-300">
-          <div class="text-4xl font-bold text-vitalityGold mb-2">£48.5W</div>
-          <div class="text-slate-400 text-sm">单店月营收峰值</div>
-        </div>
-        <div class="metric-card fade-in-delay-2 bg-white/5 rounded-2xl p-8 text-center border border-white/10 transition-all duration-300">
-          <div class="text-4xl font-bold text-vitalityGold mb-2">300%</div>
-          <div class="text-slate-400 text-sm">点货效率提升</div>
-        </div>
-        <div class="metric-card fade-in-delay-3 bg-white/5 rounded-2xl p-8 text-center border border-white/10 transition-all duration-300">
-          <div class="text-4xl font-bold text-vitalityGold mb-2">MBA</div>
-          <div class="text-slate-400 text-sm">英国班戈大学工商管理硕士</div>
-        </div>
+    <!-- Main Content -->
+    <div class="content">
+      <!-- Profile Card -->
+      <div class="card profile-card">
+        <img src="img/avatar.png" alt="Joe Xie" class="avatar">
+        <div class="profile-name">Joe Xie</div>
       </div>
-    </div>
-  </section>
 
-  <!-- Experience Section -->
-  <section id="experience" class="py-20 px-6">
-    <div class="max-w-6xl mx-auto">
-      <h2 class="text-3xl font-bold mb-12 text-center fade-in">工作经历</h2>
-      
-      <div class="experience-cards" id="experienceContainer">
-        <div class="experience-card active" style="background-image: url('img/ppmt.png')">
-          <div class="experience-info">
-            <div class="text-vitalityGold text-sm mb-2">2024.06-至今</div>
-            <h3 class="text-xl font-bold mb-3">泡泡玛特英国 | 店长</h3>
-            <div class="bullets space-y-2">
-              <div class="text-sm text-slate-300 flex items-start gap-2">
-                <span class="text-feishuBlue">•</span>
-                <span>业绩: 2025年10月营收峰值 £48.5W，全年营收约 3,700W RMB 。</span>
-              </div>
-              <div class="text-sm text-slate-300 flex items-start gap-2">
-                <span class="text-feishuBlue">•</span>
-                <span>数字化: 自研"智能点货系统"，提升效率 3 倍，准确率提升 50% 。</span>
-              </div>
-            </div>
+      <!-- Profile Overview -->
+      <div class="card">
+        <div class="badge">PROFILE OVERVIEW</div>
+        <h1 class="section-title">
+          零售营运 <span class="title-highlight">×</span> 项目逻辑 <span class="title-highlight gold">×</span> AI 自动化
+        </h1>
+        <p class="description">
+          8年以上英国市场实战经验。擅长以"项目逻辑"拆解零售痛点，通过数字化工具实现业务标准化与自动化落地。
+        </p>
+
+        <!-- Metrics -->
+        <div class="metrics-grid">
+          <div class="metric-item">
+            <div class="metric-value">£48.5W</div>
+            <div class="metric-label">单店月营收峰值</div>
           </div>
-        </div>
-
-        <div class="experience-card" style="background-image: url('img/H2T.png')">
-          <div class="experience-info">
-            <div class="text-vitalityGold text-sm mb-2">2021.09-2024.03</div>
-            <h3 class="text-xl font-bold mb-3">H2T LTD | 项目经理</h3>
-            <div class="bullets space-y-2">
-              <div class="text-sm text-slate-300 flex items-start gap-2">
-                <span class="text-feishuBlue">•</span>
-                <span>成就: 主导商业空间装修项目，前置化设计运营动线，实现 100% 按期交付 。</span>
-              </div>
-            </div>
+          <div class="metric-item">
+            <div class="metric-value">300%</div>
+            <div class="metric-label">点货效率提升</div>
           </div>
-        </div>
-
-        <div class="experience-card" style="background-image: url('img/wanyoopng.png')">
-          <div class="experience-info">
-            <div class="text-vitalityGold text-sm mb-2">2018.06-2021</div>
-            <h3 class="text-xl font-bold mb-3">网鱼网咖英国 | 品牌出海落地</h3>
-            <div class="bullets space-y-2">
-              <div class="text-sm text-slate-300 flex items-start gap-2">
-                <span class="text-feishuBlue">•</span>
-                <span>履历: 主导网鱼网咖英国多店筹建，独立跑通选址、证照审批及本地合规流程。</span>
-              </div>
-              <div class="text-sm text-slate-300 flex items-start gap-2">
-                <span class="text-feishuBlue">•</span>
-                <span>体系: 建立标准化 SOP 执行框架，为后续门店复制与运营稳定性提供基础。</span>
-              </div>
-            </div>
+          <div class="metric-item">
+            <div class="metric-value">MBA</div>
+            <div class="metric-label">英国班戈大学工商管理硕士</div>
           </div>
         </div>
       </div>
-      
-      <p class="text-center text-slate-500 text-sm mt-6">点击卡片展开详情</p>
-    </div>
-  </section>
 
-  <!-- Skills Section -->
-  <section id="skills" class="py-20 px-6 bg-white/[0.02]">
-    <div class="max-w-4xl mx-auto">
-      <h2 class="text-3xl font-bold mb-12 text-center fade-in">核心能力</h2>
-      
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
-        <div class="skill-card fade-in-delay-1 bg-white/5 rounded-xl p-6 text-center border border-white/10 transition-all duration-300">
-          <div class="text-3xl mb-3">🗂️</div>
-          <div class="text-sm text-slate-300">飞书多维表格 (Bitable)</div>
-        </div>
-        <div class="skill-card fade-in-delay-2 bg-white/5 rounded-xl p-6 text-center border border-white/10 transition-all duration-300">
-          <div class="text-3xl mb-3">🤖</div>
-          <div class="text-sm text-slate-300">AI 辅助业务 (Cursor/Vibe Coding)</div>
-        </div>
-        <div class="skill-card fade-in-delay-3 bg-white/5 rounded-xl p-6 text-center border border-white/10 transition-all duration-300">
-          <div class="text-3xl mb-3">📐</div>
-          <div class="text-sm text-slate-300">PMP 项目管理逻辑</div>
-        </div>
-        <div class="skill-card fade-in-delay-4 bg-white/5 rounded-xl p-6 text-center border border-white/10 transition-all duration-300">
-          <div class="text-3xl mb-3">🛡️</div>
-          <div class="text-sm text-slate-300">精细化损耗治理</div>
+      <!-- Tags Section -->
+      <div class="card tags-section">
+        <div class="tags-label">ABOUT TAGS</div>
+        <div class="tags">
+          <span class="tag">新零售数字化推手</span>
+          <span class="tag">SOP 标准化专家</span>
+          <span class="tag">AI 提效先行者</span>
         </div>
       </div>
-    </div>
-  </section>
 
-  <!-- Footer -->
-  <footer id="contact" class="py-20 px-6 border-t border-white/10">
-    <div class="max-w-4xl mx-auto text-center">
-      <h2 class="text-3xl font-bold mb-6 fade-in">联系方式</h2>
-      <p class="text-slate-400 mb-8 fade-in">对我的经历感兴趣？欢迎联系我交流</p>
-      <a
-        href="mailto:your.email@example.com"
-        class="inline-block px-8 py-4 bg-feishuBlue text-white rounded-full font-medium hover:bg-feishuBlue/90 transition-colors interactive-link"
-      >
-        发送邮件
-      </a>
-      
-      <div class="mt-12 text-slate-600 text-sm">
-        © 2024 BearJojo. All rights reserved.
+      <!-- Core Competencies -->
+      <div class="card">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">核心竞争力矩阵</h2>
+        <div class="competencies">
+          <div class="competency-item">
+            <div class="competency-title">数字化架构</div>
+            <div class="competency-desc">深耕飞书多维表格与 AI 工具链，将复杂零售业务流程自动化，实现管理降维。</div>
+          </div>
+          <div class="competency-item">
+            <div class="competency-title">卓越营运管理</div>
+            <div class="competency-desc">8年以上英国市场经验，擅长 P&L 利润穿透与精细化损耗治理，单店营收峰值达 £48.5W。</div>
+          </div>
+          <div class="competency-item">
+            <div class="competency-title">品牌出海落地</div>
+            <div class="competency-desc">具备从 0 到 1 的新店筹建（NSO）实战经验，跑通英国本地法律、证照及跨文化团队协作。</div>
+          </div>
+        </div>
       </div>
+
+      <!-- Digital Work -->
+      <div class="card">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">数字化实战作品</h2>
+        <div class="work-card">
+          <div class="work-badges">
+            <span class="work-badge">300% 效率跃升</span>
+            <span class="work-badge">50% 准确率增长</span>
+            <span class="work-badge">零成本上手</span>
+          </div>
+          <div class="work-title">零售数字化增效：智能点货系统</div>
+          <div class="work-demo">系统演示（建设中）</div>
+        </div>
+      </div>
+
+      <!-- Tech Stack -->
+      <div class="card">
+        <div class="tags-label">技术工具</div>
+        <div class="tech-stack">
+          <div class="tech-item">
+            <span class="tech-icon">🗂️</span>
+            <span>飞书多维表格 (Bitable)</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🤖</span>
+            <span>AI 辅助业务 (Cursor/Vibe)</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">📐</span>
+            <span>PMP 项目管理逻辑</span>
+          </div>
+          <div class="tech-item">
+            <span class="tech-icon">🛡️</span>
+            <span>精细化损耗治理</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Experience -->
+      <div class="card experience-section">
+        <h2 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem;">工作经历</h2>
+        
+        <div class="experience-card">
+          <div class="exp-period">2024.06–至今</div>
+          <div class="exp-title">泡泡玛特英国 | 店长</div>
+          <ul class="exp-bullets">
+            <li><span class="bullet-icon">•</span> 业绩: 2025年10月营收峰值 £48.5W，全年营收约 3,700W RMB。</li>
+            <li><span class="bullet-icon">•</span> 数字化: 自研"智能点货系统"，提升效率 3 倍，准确率提升 50%。</li>
+          </ul>
+        </div>
+
+        <div class="experience-card">
+          <div class="exp-period">2021.09–2024.03</div>
+          <div class="exp-title">H2T LTD | 项目经理</div>
+          <ul class="exp-bullets">
+            <li><span class="bullet-icon">•</span> 成就: 主导商业空间装修项目，前置化设计运营动线，实现 100% 按期交付。</li>
+          </ul>
+        </div>
+
+        <div class="experience-card">
+          <div class="exp-period">2018.06–2021</div>
+          <div class="exp-title">网鱼网咖英国 | 品牌出海落地</div>
+          <ul class="exp-bullets">
+            <li><span class="bullet-icon">•</span> 履历: 主导网鱼网咖英国多店筹建，独立跑通选址、证照审批及本地合规流程。</li>
+            <li><span class="bullet-icon">•</span> 体系: 建立标准化 SOP 执行框架，为后续门店复制与运营稳定性提供基础。</li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Footer -->
+      <footer>
+        <h3 style="font-size: 1.25rem; font-weight: 700; margin-bottom: 1rem; color: var(--text-primary);">联系方式</h3>
+        <p style="margin-bottom: 1rem; color: var(--text-secondary);">对我的经历感兴趣？欢迎联系我交流</p>
+        <a href="mailto:your.email@example.com" class="footer-button">发送邮件</a>
+        <div style="margin-top: 1.5rem;">© 2024 BearJojo. All rights reserved.</div>
+      </footer>
     </div>
-  </footer>
+  </div>
 
   <script>
-    // Experience cards interaction
-    const cards = document.querySelectorAll('.experience-card');
-    cards.forEach((card, index) => {
-      card.addEventListener('click', () => {
-        cards.forEach(c => c.classList.remove('active'));
-        card.classList.add('active');
+    // Simple smooth scroll for links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        const target = document.querySelector(this.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+        }
       });
-    });
-
-    // Header background on scroll
-    const header = document.querySelector('header');
-    window.addEventListener('scroll', () => {
-      if (window.scrollY > 50) {
-        header.classList.add('bg-primaryBg/90', 'backdrop-blur-md');
-      } else {
-        header.classList.remove('bg-primaryBg/90', 'backdrop-blur-md');
-      }
     });
   </script>
 </body>
