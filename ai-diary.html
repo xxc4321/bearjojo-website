@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="AI 日记 - 记录关于人工智能的思考与见解。" />
+  <meta name="author" content="BearJojo" />
+  <meta name="theme-color" content="#131a2b" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#D9D2C5" media="(prefers-color-scheme: light)" />
+  
+  <meta property="og:title" content="AI 日记 | BearJojo" />
+  <meta property="og:description" content="记录关于人工智能的思考与见解。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+  
+  <title>AI 日记 | BearJojo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css?v=1.1" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳转到主要内容</a>
+  <div class="container">
+    <header role="banner">
+      <nav class="header-nav" role="navigation" aria-label="主导航">
+        <div class="logo" aria-label="BearJojo 个人网站">BearJojo</div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">主页</a>
+          <a href="ai-diary.html" class="nav-link active">AI日记</a>
+          <a href="daily-news.html" class="nav-link">每日资讯</a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题" aria-pressed="false" title="切换日间/夜间模式">
+          <span id="themeIcon" aria-hidden="true">🌙</span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="main-content" class="content" role="main">
+      <div class="page-header animate-on-scroll">
+        <h1 class="page-title">AI Diary</h1>
+        <p class="page-subtitle">思考、探索与人工智能的进化之路</p>
+      </div>
+
+      <div class="list-container">
+        <!-- Diary Entry 1 -->
+        <article class="card diary-card animate-on-scroll">
+          <div class="diary-header">
+            <h2 class="diary-title">大模型时代的提示词工程演进</h2>
+            <span class="diary-date">2024.04.15</span>
+          </div>
+          <p class="diary-summary">随着模型逻辑推理能力的增强，我们对提示词的需求正在从简单的指令描述转向复杂的思维链设计。本文探讨了结构化提示词在复杂任务中的实际表现...</p>
+        </article>
+
+        <!-- Diary Entry 2 -->
+        <article class="card diary-card animate-on-scroll">
+          <div class="diary-header">
+            <h2 class="diary-title">AI 赋能下的自动化工作流再造</h2>
+            <span class="diary-date">2024.04.12</span>
+          </div>
+          <p class="diary-summary">探讨如何利用 AutoGPT 和各类 API 接口，将日常繁琐的数据处理工作彻底自动化。效率提升不仅仅是工具的更迭，更是思维模式的转变。</p>
+        </article>
+
+        <!-- Diary Entry 3 -->
+        <article class="card diary-card animate-on-scroll">
+          <div class="diary-header">
+            <h2 class="diary-title">从工具到伙伴：人机协作的新范式</h2>
+            <span class="diary-date">2024.04.08</span>
+          </div>
+          <p class="diary-summary">当 AI 开始具备一定的“创造性”时，人类的角色将如何定义？在这一期的日记中，我分享了与 Copilot 协同开发大型项目时的感悟。</p>
+        </article>
+      </div>
+
+      <!-- Footer -->
+      <footer role="contentinfo">
+        <h3 style="font-size: var(--font-size-2xl); font-weight: 700; margin-bottom: var(--spacing-lg); color: var(--color-text-primary);">联系方式</h3>
+        <p style="margin-bottom: var(--spacing-lg); color: var(--color-text-secondary);">对我的经历感兴趣？欢迎联系我交流</p>
+        <a href="mailto:your.email@example.com" class="footer-button" aria-label="发送邮件联系">发送邮件</a>
+        <div style="margin-top: var(--spacing-xl);">© 2024 BearJojo. All rights reserved.</div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>

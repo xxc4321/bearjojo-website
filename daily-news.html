@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="每日资讯 - 追踪科技与零售行业的最新动态。" />
+  <meta name="author" content="BearJojo" />
+  <meta name="theme-color" content="#131a2b" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#D9D2C5" media="(prefers-color-scheme: light)" />
+  
+  <meta property="og:title" content="每日资讯 | BearJojo" />
+  <meta property="og:description" content="追踪科技与零售行业的最新动态。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+  
+  <title>每日资讯 | BearJojo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css?v=1.1" />
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳转到主要内容</a>
+  <div class="container">
+    <header role="banner">
+      <nav class="header-nav" role="navigation" aria-label="主导航">
+        <div class="logo" aria-label="BearJojo 个人网站">BearJojo</div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">主页</a>
+          <a href="ai-diary.html" class="nav-link">AI日记</a>
+          <a href="daily-news.html" class="nav-link active">每日资讯</a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题" aria-pressed="false" title="切换日间/夜间模式">
+          <span id="themeIcon" aria-hidden="true">🌙</span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="main-content" class="content" role="main">
+      <div class="page-header animate-on-scroll">
+        <h1 class="page-title">Daily News</h1>
+        <p class="page-subtitle">行业快讯、科技动态与前沿资讯</p>
+      </div>
+
+      <div class="list-container">
+        <!-- News Item 1 -->
+        <article class="card news-card animate-on-scroll">
+          <span class="news-source">TechCrunch • 2024.04.15</span>
+          <h2 class="news-title">OpenAI 推出全新多模态大模型 GPT-5 预览版</h2>
+          <p class="news-summary">据消息人士透露，新一代模型在逻辑推理与跨媒体理解能力上实现了质的飞跃，将重新定义个人 AI 助手的边界。</p>
+        </article>
+
+        <!-- News Item 2 -->
+        <article class="card news-card animate-on-scroll">
+          <span class="news-source">Retail Dive • 2024.04.14</span>
+          <h2 class="news-title">全球零售业数字化转型报告：AI 成为增长新引擎</h2>
+          <p class="news-summary">最新的市场调研显示，超过 70% 的头部零售商已经开始在库存管理和个性化推荐中深度整合人工智能技术。</p>
+        </article>
+
+        <!-- News Item 3 -->
+        <article class="card news-card animate-on-scroll">
+          <span class="news-source">The Verge • 2024.04.13</span>
+          <h2 class="news-title">新款增强现实眼镜发布，挑战传统交互体验</h2>
+          <p class="news-summary">这款轻量化的 AR 设备支持全天候佩戴，内置高性能芯片，能够实现实时的实时翻译与环境信息增强。</p>
+        </article>
+      </div>
+
+      <!-- Footer -->
+      <footer role="contentinfo">
+        <h3 style="font-size: var(--font-size-2xl); font-weight: 700; margin-bottom: var(--spacing-lg); color: var(--color-text-primary);">联系方式</h3>
+        <p style="margin-bottom: var(--spacing-lg); color: var(--color-text-secondary);">对我的经历感兴趣？欢迎联系我交流</p>
+        <a href="mailto:your.email@example.com" class="footer-button" aria-label="发送邮件联系">发送邮件</a>
+        <div style="margin-top: var(--spacing-xl);">© 2024 BearJojo. All rights reserved.</div>
+      </footer>
+    </main>
+  </div>
+
+  <script src="index.js"></script>
+</body>
+</html>
