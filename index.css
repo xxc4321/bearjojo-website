@@ -250,6 +250,9 @@ html:not([data-theme="light"]) .exp-period {
 [data-theme="light"] .card:hover .exp-bullets,
 [data-theme="light"] .card:hover .diary-summary,
 [data-theme="light"] .card:hover .news-summary,
+[data-theme="light"] .card:hover .diary-meta,
+[data-theme="light"] .card:hover .diary-content summary,
+[data-theme="light"] .card:hover .diary-content .full-text,
 [data-theme="light"] .competency-item:hover .competency-desc,
 [data-theme="light"] .metric-item:hover .metric-label,
 [data-theme="light"] .experience-card:hover .exp-bullets,
@@ -436,9 +439,59 @@ header {
   font-family: monospace;
 }
 
-.diary-summary {
+.diary-meta {
+  font-size: var(--font-size-xs);
+  color: var(--color-text-tertiary);
+  margin-top: calc(-1 * var(--spacing-sm));
+  margin-bottom: var(--spacing-sm);
+  display: flex;
+  gap: var(--spacing-sm);
+  opacity: 0.8;
+  align-items: center;
+}
+
+.meta-divider {
+  opacity: 0.4;
+  font-size: 0.8em;
+}
+
+.diary-content {
+  cursor: pointer;
+}
+
+.diary-content summary {
+  list-style: none;
+  color: var(--color-primary);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-xs);
+  margin-top: var(--spacing-sm);
+}
+
+.diary-content summary::before {
+  content: '▶';
+  font-size: 0.7em;
+  transition: transform 0.3s;
+}
+
+.diary-content[open] summary::before {
+  transform: rotate(90deg);
+}
+
+.diary-content[open] summary {
+  margin-bottom: var(--spacing-md);
+}
+
+.diary-content .full-text {
   color: var(--color-text-secondary);
   line-height: var(--line-height-relaxed);
+  cursor: default;
+}
+
+.diary-content .full-text p {
+  margin-bottom: var(--spacing-md);
 }
 
 /* News Card Styles */
