@@ -1,0 +1,829 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>原子专注迭代助手 | BearJojo</title>
+<link rel="stylesheet" href="assets/fonts.css">
+<link rel="stylesheet" href="assets/base.css">
+<link rel="stylesheet" href="assets/animations.css">
+<link rel="stylesheet" href="assets/style.css">
+<style id="af-transition-override">
+  /* 更有质感的切换：垂直位移 + 轻微缩放 + 模糊 + 长缓动 */
+  .deck .slide{
+    transition:
+      opacity .7s cubic-bezier(.22,.61,.36,1),
+      transform .95s cubic-bezier(.22,.61,.36,1),
+      filter .6s cubic-bezier(.22,.61,.36,1) !important;
+    transform: translateY(56px) scale(.965) !important;
+    filter: blur(14px) !important;
+    will-change: transform, opacity, filter;
+  }
+  .deck .slide.is-active{
+    transform: translateY(0) scale(1) !important;
+    filter: blur(0) !important;
+  }
+  .deck .slide.is-prev{
+    transform: translateY(-56px) scale(.965) !important;
+    filter: blur(14px) !important;
+  }
+  /* 预览模式下强制无过渡 */
+  html[data-preview="1"] .deck .slide,
+  body[data-preview="1"] .deck .slide{
+    transition:none !important;
+    transform:none !important;
+    filter:none !important;
+  }
+  /* 禁用动画偏好时也保持安静 */
+  @media (prefers-reduced-motion: reduce){
+    .deck .slide{
+      transition: opacity .3s ease !important;
+      transform:none !important;
+      filter:none !important;
+    }
+    .deck .slide.is-active,.deck .slide.is-prev{
+      transform:none !important;
+      filter:none !important;
+    }
+  }
+</style>
+</head>
+<body class="tpl-atomic-focus">
+
+<a href="../../skills.html" style="position:fixed;top:20px;left:20px;z-index:100;font-size:12px;color:#8b949e;text-decoration:none;background:rgba(22,27,34,.8);padding:6px 14px;border-radius:999px;border:1px solid #30363d;backdrop-filter:blur(8px);">← 返回小技能</a>
+
+<div class="deck">
+
+  <!-- ============ SLIDE 1 · 开场痛点 ============ -->
+  <section class="slide is-active">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">01 / 14</div>
+    <div class="oc-tag">● 很多人都在这里卡住</div>
+    <h1 class="oc-h1">不是你<span class="oc-g">懒</span>，<br>是目标太大了</h1>
+    <p class="oc-sub">看看你现在的屏幕 —— 十几个待办、几个想学的东西、几个"有空再说"的副业。<br>想做的太多，最后一步都没开始。</p>
+
+    <div class="af-chaos stagger" style="margin-top:36px">
+      <div class="af-browser">
+        <div class="af-browser-bar">
+          <span class="dot"></span><span class="dot"></span><span class="dot"></span>
+        </div>
+        <div class="af-tabs">
+          <div class="af-tab">Cursor · 怎么上手</div>
+          <div class="af-tab">RAG 入门 - 知乎</div>
+          <div class="af-tab">小红书变现 7 天</div>
+          <div class="af-tab">Hugo vs Astro</div>
+          <div class="af-tab">考证PMP 路线图</div>
+          <div class="af-tab">减脂菜单</div>
+          <div class="af-tab active">又是新一天</div>
+          <div class="af-tab">Notion 模板</div>
+          <div class="af-tab">AI Agent</div>
+          <div class="af-tab">... +9 more</div>
+        </div>
+        <div class="af-browser-body">
+          <div class="af-cursor-pulse"></div>
+          <p>已经看了 20 分钟，什么都没开始。</p>
+        </div>
+      </div>
+
+      <div class="af-phone">
+        <div class="af-phone-head">📝 想做的事</div>
+        <ul class="af-memo">
+          <li>学 AI</li>
+          <li>搭个人博客</li>
+          <li>做副业 / 自媒体</li>
+          <li>减肥 10 斤</li>
+          <li>考个证</li>
+          <li>整理作品集</li>
+          <li>读完那本书</li>
+          <li>开始健身</li>
+          <li>学剪视频</li>
+          <li>把家里收拾一下</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="notes">开场建立情绪锚点：不是观众能力问题，是"目标太大、太模糊"让他们动不了。2-3 秒让他们认同"我就是这样"。</div>
+  </section>
+
+  <!-- ============ SLIDE 2 · 标题揭晓 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">02 / 14</div>
+    <div class="oc-tag">● 所以我做了这个 AI SKILL</div>
+
+    <div class="af-rock-anim">
+      <div class="af-rock">🪨</div>
+      <div class="af-blocks">
+        <div class="af-block"></div><div class="af-block"></div><div class="af-block"></div><div class="af-block"></div><div class="af-block"></div>
+        <div class="af-block"></div><div class="af-block"></div><div class="af-block"></div><div class="af-block"></div><div class="af-block"></div>
+      </div>
+    </div>
+
+    <h1 class="oc-h1"><span class="oc-g">原子专注迭代助手</span></h1>
+    <p class="oc-sub">把一个遥不可及的大目标，<br>拆成 <b style="color:#c084fc">15 分钟就能推进</b>的最小行动单元。</p>
+
+    <div style="margin-top:32px">
+      <span class="oc-pill">🎯 目标拆解</span>
+      <span class="oc-pill">⏱ 15 分钟专注</span>
+      <span class="oc-pill">🔁 实时迭代</span>
+    </div>
+
+    <div class="notes">标题页。不要继续铺情绪，直接亮产品。让观众知道"解法"是什么。</div>
+  </section>
+
+  <!-- ============ SLIDE 3 · 方法论（Atomic Habits + 番茄钟） ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">03 / 14</div>
+    <div class="oc-tag">● 思路来源 · 不是凭空想出来的</div>
+    <h2 class="oc-h2">两个被验证过的<span class="oc-g">底层思路</span></h2>
+
+    <div class="af-method stagger">
+      <div class="oc-card">
+        <div class="af-method-icon">📖</div>
+        <div class="kw">ATOMIC HABITS · James Clear</div>
+        <h3>微小改变 · 长期放大</h3>
+        <p>真正有效的改变，<br>不来自"下大决心"，<br>而来自**可重复的微小行动**。</p>
+      </div>
+      <div class="plus">+</div>
+      <div class="oc-card">
+        <div class="af-method-icon">⏱</div>
+        <div class="kw">POMODORO · 番茄工作法</div>
+        <h3>明确时段 · 降低拖延</h3>
+        <p>把专注切成明确时段，<br>不给焦虑生根的时间，<br>让"开始"变得极低门槛。</p>
+      </div>
+    </div>
+
+    <div class="af-pool-card" style="margin-top:28px">
+      <span>🔧</span>
+      <span>我只是把这套思路交给 AI，让它能 <b style="color:#c084fc">实时拆任务、实时更新下一步</b>。</span>
+    </div>
+
+    <div class="notes">为产品找权威背书。两个公认的方法论结合起来，让观众潜意识里觉得"这靠谱"。</div>
+  </section>
+
+  <!-- ============ SLIDE 4 · 原子助手演示 (/goal /focus) ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">04 / 14</div>
+    <div class="oc-tag">● 场景 1 · 副业 / 自媒体启动困难</div>
+    <h2 class="oc-h2">"做一个项目" 太大 →<br><span class="oc-g">现在就能做的下一步</span></h2>
+
+    <div class="af-chat">
+      <div class="af-chat-row user">
+        <div class="af-avatar user">熊</div>
+        <div>
+          <div class="af-name">熊啾啾</div>
+          <div class="af-bubble user"><span class="cmd">/goal 做一个个人博客</span></div>
+        </div>
+      </div>
+      <div class="af-chat-row">
+        <div class="af-avatar bot">🐝</div>
+        <div>
+          <div class="af-name">原子专注迭代助手</div>
+          <div class="af-bubble bot">
+            哦豁，要搭博客啦 🐝 <span class="sig">已加入想法池 #7</span>
+            帮你拆成 4 个 15 分钟能推进的小任务：
+            <ol>
+              <li>选博客平台（Hugo / Astro / Notion）</li>
+              <li>注册域名</li>
+              <li>建第一篇 Hello World</li>
+              <li>挑一个现成主题</li>
+            </ol>
+            先从哪个开始？<span class="cmd">/focus &lt;编号&gt;</span>
+          </div>
+        </div>
+      </div>
+      <div class="af-chat-row user">
+        <div class="af-avatar user">熊</div>
+        <div>
+          <div class="af-name">熊啾啾</div>
+          <div class="af-bubble user"><span class="cmd">/focus 1</span></div>
+        </div>
+      </div>
+      <div class="af-chat-row">
+        <div class="af-avatar bot">🐝</div>
+        <div>
+          <div class="af-name">原子专注迭代助手</div>
+          <div class="af-bubble bot">
+            好嘞，开始 15 分钟专注 ⏱
+            <div class="af-timer"><span class="dot"></span>15:00</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p class="oc-sub-sm" style="margin-top:18px;color:#c084fc">不是"改变人生"，是"先开始这 15 分钟"。</p>
+
+    <div class="notes">这是第一个"产品证据"。要让观众一眼看懂这个 Skill 怎么用 —— 一条 /goal 命令 + 一条 /focus 编号，就完成了"从焦虑到开始"的全过程。</div>
+  </section>
+
+  <!-- ============ SLIDE 5 · 想法池时间轴 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">05 / 14</div>
+    <div class="oc-tag">● 场景 2 · 灵感来得快，丢得也快</div>
+    <h2 class="oc-h2">随时随地，<span class="oc-g">先接住再说</span></h2>
+
+    <div class="af-timeline">
+      <div class="af-timeline-line"></div>
+      <div class="af-timeline-items">
+        <div class="af-ti">
+          <div class="af-ti-icon">🚶‍♂️</div>
+          <div class="af-ti-time">08:12 · 走去上班的路上</div>
+          <div class="af-ti-bubble">突然想到一个 B 站视频选题：<br>"AI Skill 怎么用"</div>
+        </div>
+        <div class="af-ti">
+          <div class="af-ti-icon">🏋️</div>
+          <div class="af-ti-time">14:30 · 健身房换组间隙</div>
+          <div class="af-ti-bubble">门店培训流程<br>有个优化点</div>
+        </div>
+        <div class="af-ti">
+          <div class="af-ti-icon">☕</div>
+          <div class="af-ti-time">18:45 · 星巴克排队</div>
+          <div class="af-ti-bubble">周报模板<br>可以这样写</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="af-pool-card">
+      <span style="font-size:28px">💡</span>
+      <span>三条灵感 → <span class="c">已加入想法池</span></span>
+      <span style="color:#3fb950;font-size:14px;margin-left:8px">✓ 0 条丢失</span>
+    </div>
+
+    <div class="notes">这一页不讲产品功能，讲"真实痛点"。让观众回忆："我昨天在健身房想到的那件事，真的想不起来了。"</div>
+  </section>
+
+  <!-- ============ SLIDE 6 · 想法池双栏 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">06 / 14</div>
+    <div class="oc-tag">● 想法池 · 不让任何灵感消失</div>
+    <h2 class="oc-h2">一句话进去，<span class="oc-g">结构化收纳</span></h2>
+
+    <div class="af-pool">
+      <div class="af-pool-chat">
+        <div class="af-chat-row user">
+          <div class="af-avatar user">熊</div>
+          <div>
+            <div class="af-name">熊啾啾 · 18:45</div>
+            <div class="af-bubble user">做一个介绍原子专注迭代助手的视频，加入想法池</div>
+          </div>
+        </div>
+        <div class="af-chat-row">
+          <div class="af-avatar bot">🐝</div>
+          <div>
+            <div class="af-name">原子专注迭代助手</div>
+            <div class="af-bubble bot">
+              好，<b style="color:#3fb950">已加入想法池 #30</b> 🐝<br>
+              这个原子助手就是之前装的番茄钟技能对吧？<br><br>
+              确认几个问题我就能帮你拆解：
+              <ol>
+                <li>视频形式：实拍出镜？录屏？AI 生成画面？</li>
+                <li>你打算怎么用：自己上手/录，还是让我帮你生成？</li>
+                <li>目标受众：AI 圈 vs 普通打工人？</li>
+              </ol>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="af-pool-list">
+        <div class="af-pool-list-head">
+          <h4>💡 我的想法池</h4>
+          <span class="count">30</span>
+        </div>
+        <div class="af-idea-row new">
+          <span class="id">#30</span>
+          <span class="txt">做一个介绍原子专注迭代助手的视频</span>
+          <span class="time">18:45</span>
+        </div>
+        <div class="af-idea-row">
+          <span class="id">#29</span>
+          <span class="txt">周报模板可以这样写</span>
+          <span class="time">18:45</span>
+        </div>
+        <div class="af-idea-row">
+          <span class="id">#28</span>
+          <span class="txt">门店培训流程优化点</span>
+          <span class="time">14:30</span>
+        </div>
+        <div class="af-idea-row">
+          <span class="id">#27</span>
+          <span class="txt">B 站视频选题：AI Skill 怎么用</span>
+          <span class="time">08:12</span>
+        </div>
+        <div class="af-idea-row">
+          <span class="id">#26</span>
+          <span class="txt">发布我的第一个 B 站视频</span>
+          <span class="time">昨天</span>
+        </div>
+        <div class="af-idea-row">
+          <span class="id">#25</span>
+          <span class="txt">智能点货系统 · 多店版本设计</span>
+          <span class="time">昨天</span>
+        </div>
+        <div class="af-idea-row">
+          <span class="id">#24</span>
+          <span class="txt">英国签证新政研究</span>
+          <span class="time">2 天前</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="notes">让观众看见"一句话 → 结构化条目"的完整过程。重点是右栏的 #30 高亮，让"新加入"这个动作可视化。</div>
+  </section>
+
+  <!-- ============ SLIDE 7 · 专注日记 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">07 / 14</div>
+    <div class="oc-tag">● 场景 3 · 看见进度，成就感回来</div>
+    <h2 class="oc-h2">每天自动生成 <span class="oc-g">专注日记</span></h2>
+
+    <div class="af-diary">
+      <div class="af-day">
+        <div class="af-day-head">
+          <span class="badge">DAY 1</span>
+          <span class="date">2026-04-15</span>
+        </div>
+        <h5># 今天做了什么</h5>
+        <ul>
+          <li>个人博客 · 选平台（15m）</li>
+        </ul>
+        <h5 style="margin-top:8px"># 推进感</h5>
+        <ul><li>还在起步，<span class="tag">#拖延</span></li></ul>
+      </div>
+
+      <div class="af-day d2">
+        <div class="af-day-head">
+          <span class="badge">DAY 2</span>
+          <span class="date">2026-04-16</span>
+        </div>
+        <h5># 今天做了什么</h5>
+        <ul>
+          <li>域名注册（15m）</li>
+          <li>Hello World 上线（15m）</li>
+          <li>RAG 概念复述（15m）</li>
+        </ul>
+        <h5 style="margin-top:8px"># 推进感</h5>
+        <ul><li>能动起来了，<span class="tag">#专注</span></li></ul>
+      </div>
+
+      <div class="af-day d3">
+        <div class="af-day-head">
+          <span class="badge">DAY 3</span>
+          <span class="date">2026-04-17</span>
+        </div>
+        <h5># 今天做了什么</h5>
+        <ul>
+          <li>博客主题选定（15m）</li>
+          <li>首页文案初稿（15m）</li>
+          <li>Agent 类比案例（30m）</li>
+          <li>想法池分类 × 4（15m）</li>
+          <li>发布第一篇正文</li>
+        </ul>
+        <h5 style="margin-top:8px"># 推进感</h5>
+        <ul><li>开始成体系，<span class="tag">#飞轮</span></li></ul>
+      </div>
+
+      <div class="af-stats">
+        <div>
+          <h5>本周推进</h5>
+          <div class="af-stat-row"><span class="label">完成任务</span><span class="val">12 → 18 → 24</span></div>
+          <div class="af-stat-row"><span class="label">专注时长</span><span class="val">15m → 45m → 90m</span></div>
+          <div class="af-stat-row"><span class="label">常卡点</span><span class="val">"选主题"</span></div>
+        </div>
+        <div>
+          <h5>推进曲线</h5>
+          <div class="af-spark">
+            <div class="b" style="height:15%"></div>
+            <div class="b" style="height:22%"></div>
+            <div class="b" style="height:18%"></div>
+            <div class="b" style="height:40%"></div>
+            <div class="b" style="height:55%"></div>
+            <div class="b" style="height:48%"></div>
+            <div class="b" style="height:72%"></div>
+            <div class="b" style="height:65%"></div>
+            <div class="b" style="height:88%"></div>
+          </div>
+        </div>
+        <div style="font-size:12px;color:#c084fc;line-height:1.6;padding-top:6px;border-top:1px solid rgba(168,85,247,.3)">
+          ✨ 你已经连续推进 3 天，<br>比上周多完成 <b>+100%</b> 任务。
+        </div>
+      </div>
+    </div>
+
+    <div class="notes">这一页的视觉目的：让观众看见"真实推进感"。不是打鸡血，是让他们相信"慢慢来，但会越来越多"。</div>
+  </section>
+
+  <!-- ============ SLIDE 8 · 引出另一半（飞轮） ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">08 / 14</div>
+    <div class="oc-tag">● 做的那一半讲完了 · 还有学的那一半</div>
+    <h2 class="oc-h2">原子助手只是<span class="oc-g">半个飞轮</span></h2>
+
+    <div class="af-flywheel">
+      <div class="af-fw-skill purple">
+        <div class="icon">🐝</div>
+        <h4>原子专注迭代助手</h4>
+        <p>帮你<br><b style="color:#c084fc">开始</b>、<b style="color:#c084fc">推进</b>、<b style="color:#c084fc">复盘</b></p>
+      </div>
+
+      <div class="af-fw-center">
+        <div class="af-fw-core">
+          <div class="af-fw-core-inner">
+            <div class="t">SHARED</div>
+            <div class="v">知识库</div>
+          </div>
+        </div>
+        <div class="af-fw-arrow">↕</div>
+      </div>
+
+      <div class="af-fw-skill pink">
+        <div class="icon">✨</div>
+        <h4>认知快启 <span style="font-size:11px;color:#ec4899;font-weight:400;margin-left:4px">↓ 下一页登场</span></h4>
+        <p>帮你<br><b style="color:#ec4899">看懂</b>、<b style="color:#ec4899">讲出</b>、<b style="color:#ec4899">内化</b></p>
+      </div>
+    </div>
+
+    <div class="af-fw-feeds stagger">
+      <div class="af-fw-feed">你的任务</div>
+      <div class="af-fw-feed">你的想法</div>
+      <div class="af-fw-feed">你的学习记录</div>
+      <div class="af-fw-feed">你的常见卡点</div>
+      <div class="af-fw-feed">你的兴趣画像</div>
+      <div class="af-fw-feed">你的语言习惯</div>
+    </div>
+
+    <p class="oc-sub-sm" style="margin-top:20px;text-align:center">
+      原子助手让你能"<b style="color:#c084fc">开始做</b>"。<br>
+      接下来这位，让你能"<b style="color:#ec4899">开始懂</b>" —— <b style="color:#ec4899">认知快启 ✨</b> 登场。
+    </p>
+
+    <div class="notes">这一页做"引言 / 转场"。观众看完原子助手后，这里揭示还有第二个 Skill，共享知识库让两者组成飞轮。下面三页马上讲认知快启本身。</div>
+  </section>
+
+  <!-- ============ SLIDE 9 · 认知快启 对比反差 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">09 / 14</div>
+    <div class="oc-tag">● 场景 4 · 学 AI 但一直听不懂</div>
+    <h2 class="oc-h2">很多人不是不学，是 <span class="oc-g">"讲法不对"</span></h2>
+
+    <div class="af-compare">
+      <div class="col bad">
+        <span class="label">❌ 标准 AI 回答</span>
+        <h4>什么是 RAG？</h4>
+        <div class="jargon">
+RAG（Retrieval-Augmented Generation）是一种检索增强生成技术，通过 Embedding 向量化将文档映射到高维向量空间，再基于相似度检索进行 Agent 增强的 generation 流程…
+        </div>
+        <p style="margin-top:10px;font-size:12px;color:#484f58;line-height:1.6">
+          观众表情：🤯 看不懂 → 关掉
+        </p>
+      </div>
+
+      <div class="af-compare-mid">
+        <div class="user-said">👤 听不懂</div>
+        <div class="arrow">→</div>
+      </div>
+
+      <div class="col good">
+        <span class="label">✅ 认知快启</span>
+        <h4>什么是 RAG？</h4>
+        <div class="analogy">
+          想象一个便利店 <strong>店员</strong>。<br><br>
+          他不会把全部商品都背下来，而是<strong>随手翻一下库存系统</strong>，看看店里有啥，再回答你。<br><br>
+          <strong>RAG</strong> = 给 AI 配了这么一个"随查随用的库存系统"，不用全背，但回答有据。
+        </div>
+      </div>
+    </div>
+
+    <div class="notes">这一页做"反差打击"。左边故意让观众感到烦躁，右边立刻给一口清泉。对比越强烈，"换种讲法"的威力越明显。</div>
+  </section>
+
+  <!-- ============ SLIDE 10 · 认知快启 理解度 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">10 / 14</div>
+    <div class="oc-tag">● 场景 4 续 · 理解度是可以被"解锁"的</div>
+    <h2 class="oc-h2">一句 "听不懂"，就切换一种讲法</h2>
+
+    <div class="af-chat" style="max-width:720px">
+      <div class="af-chat-row user">
+        <div class="af-avatar user">熊</div>
+        <div>
+          <div class="af-name">熊啾啾</div>
+          <div class="af-bubble user">什么是 Agent？</div>
+        </div>
+      </div>
+      <div class="af-chat-row">
+        <div class="af-avatar bot">✨</div>
+        <div>
+          <div class="af-name">认知快启</div>
+          <div class="af-bubble bot">Agent 是一个基于 LLM 的自主任务规划执行框架，它可以调用工具、分解子任务…</div>
+        </div>
+      </div>
+      <div class="af-chat-row user">
+        <div class="af-avatar user">熊</div>
+        <div>
+          <div class="af-name">熊啾啾</div>
+          <div class="af-bubble user">听不懂</div>
+        </div>
+      </div>
+      <div class="af-chat-row">
+        <div class="af-avatar bot">✨</div>
+        <div>
+          <div class="af-name">认知快启</div>
+          <div class="af-bubble bot">
+            换一个 🐝 <br>
+            想象一个 <b style="color:#c084fc">会自己干活的店员</b> ——<br>
+            不用你每件事都吩咐，你说一句"把滞销品上架到小红书"，它会自己去查库存、写文案、排版、发布。<br>
+            <b>这就是 Agent。</b>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="af-understand slide-up" style="margin-top:18px">
+      <div style="display:flex;justify-content:space-between;align-items:baseline">
+        <span style="font-size:13px;color:#8b949e;letter-spacing:.1em;text-transform:uppercase">理解度</span>
+        <span style="font-family:'JetBrains Mono',monospace;font-size:18px;color:#3fb950;font-weight:700">20% → 100%</span>
+      </div>
+      <div class="af-bar"><div class="af-bar-fill"></div></div>
+      <div class="af-bar-marks"><span>😵‍💫 蒙</span><span>🤔 勉强</span><span>💡 哦！</span><span>😄 懂了</span></div>
+      <div class="af-check-card">终于懂了</div>
+    </div>
+
+    <div class="notes">核心交互闭环：一句"听不懂"换一种讲法，观众会意识到"原来学这件事可以这么轻松"。理解度条给的是一种"可视化的成就反馈"。</div>
+  </section>
+
+  <!-- ============ SLIDE 11 · 费曼复述 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">11 / 14</div>
+    <div class="oc-tag">● 费曼学习法 · 真正理解的证据</div>
+    <h2 class="oc-h2">真正懂了，<span class="oc-g">是你能讲出来</span></h2>
+
+    <div class="af-feynman-steps stagger" style="max-width:900px">
+      <div class="af-feynman-step">
+        <div class="n">1</div>
+        <h4>看懂了</h4>
+        <p>字都认识，<br>道理也通</p>
+      </div>
+      <div class="af-feynman-step">
+        <div class="n">2</div>
+        <h4>听懂了</h4>
+        <p>别人讲的时候，<br>你能点头</p>
+      </div>
+      <div class="af-feynman-step active">
+        <div class="n">3</div>
+        <h4>讲出来了</h4>
+        <p>用自己的话，<br>讲给别人听</p>
+      </div>
+    </div>
+
+    <div style="width:100%;max-width:760px;margin-top:22px">
+      <div style="text-align:left;margin-bottom:6px;font-size:13px;color:#8b949e">
+        <b style="color:#c084fc">认知快启 ✨</b>：用你自己的话讲一遍试试？
+      </div>
+      <div class="af-typewriter">
+        &gt; RAG 就是给 AI 配了个<b style="color:#c084fc">可以随时翻的笔记本</b>，<br>
+        &nbsp;&nbsp;它不用全记住，但要用的时候一查就有
+      </div>
+      <div class="af-check-card" style="max-width:760px">✨ 你已经真的懂了</div>
+    </div>
+
+    <div class="notes">这是"认知快启"区别于其他 AI 的核心：不是你听懂就结束，而是让你复述。复述动作本身让理解固化。</div>
+  </section>
+
+  <!-- ============ SLIDE 12 · 开源（四联屏） ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">12 / 14</div>
+    <div class="oc-tag">● 已开源 · 网站 + GITHUB</div>
+    <h2 class="oc-h2">不用等一个复杂产品，<br><span class="oc-g">现在就能用</span></h2>
+
+    <div class="af-mockup">
+      <div class="af-win">
+        <div class="af-win-head">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="af-win-url">🔒 bearjojo.com/skills</div>
+        </div>
+        <div class="af-win-body">
+          <h5>🧰 小技能 · BearJojo</h5>
+          <p>我自研的 AI Skills 合集，已开源，复制提示词即可使用。</p>
+          <div class="tag-row">
+            <span>🐝 原子专注迭代助手</span>
+            <span>✨ 认知快启</span>
+            <span>🌱 更多陆续添加</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="af-win">
+        <div class="af-win-head">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="af-win-url">🔒 github.com/xxc4321</div>
+        </div>
+        <div class="af-win-body">
+          <h5>📦 xxc4321 / atomic-focus-skill</h5>
+          <p><span class="cm">Public</span> · ⭐ Skill for Claude / any AI Agent</p>
+          <pre><span class="cm"># quick start</span>
+<span class="fn">$</span> git clone https://github.com/xxc4321/...
+<span class="fn">$</span> copy <span class="st">SKILL.md</span> → your AI Agent</pre>
+        </div>
+      </div>
+
+      <div class="af-win">
+        <div class="af-win-head">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="af-win-url">📄 README.md</div>
+        </div>
+        <div class="af-win-body">
+          <h5># 原子专注迭代助手</h5>
+          <p>把大目标拆成 15 分钟能推进的最小行动单元。</p>
+          <p><b style="color:#c084fc">## 命令</b><br>
+          • <span class="fn">/goal</span> &lt;目标&gt; — 拆成原子任务<br>
+          • <span class="fn">/focus</span> &lt;编号&gt; — 开始 15 分钟<br>
+          • <span class="fn">/diary</span> — 生成专注日记</p>
+        </div>
+      </div>
+
+      <div class="af-win">
+        <div class="af-win-head">
+          <div class="dots"><span></span><span></span><span></span></div>
+          <div class="af-win-url">⚙ SKILL.md</div>
+        </div>
+        <div class="af-win-body">
+          <h5># SKILL MANIFEST</h5>
+          <pre><span class="cm">---</span>
+<span class="fn">name</span>: atomic-focus
+<span class="fn">trigger</span>: <span class="st">"/goal"</span>, <span class="st">"/focus"</span>
+<span class="fn">purpose</span>: break large
+  goals into 15-min
+  atomic actions
+<span class="cm">---</span></pre>
+          <p style="margin-top:6px">复制粘贴给任意 AI Agent 即可激活。</p>
+        </div>
+      </div>
+    </div>
+
+    <div class="af-cta-row">
+      <span class="af-cta">⬇ bearjojo.com</span>
+      <span class="af-cta">⭐ github.com/xxc4321</span>
+      <span class="af-cta">📋 Copy → Paste → Run</span>
+    </div>
+
+    <div class="notes">四联屏给的是"可信度" —— 真实的网站、真实的 GitHub、真实的文档、真实的 SKILL manifest。强调"现在就能用"。</div>
+  </section>
+
+  <!-- ============ SLIDE 13 · 结尾塌缩 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">13 / 14</div>
+    <div class="oc-tag">● 从这里 · 到这里</div>
+    <h2 class="oc-h2">真正能改变人的工具，<br>往往<span class="oc-g">不最复杂</span></h2>
+
+    <div class="af-collapse">
+      <div class="af-collapse-col before">
+        <h4>你现在的屏幕</h4>
+        <ul>
+          <li>☐ 学 AI</li>
+          <li>☐ 搭个人博客</li>
+          <li>☐ 做副业</li>
+          <li>☐ 减肥 10 斤</li>
+          <li>☐ 考个证</li>
+          <li>☐ 整理作品集</li>
+          <li>☐ 开始健身</li>
+          <li>... +9 more</li>
+        </ul>
+      </div>
+
+      <div class="af-collapse-arrow">→</div>
+
+      <div class="af-collapse-col after">
+        <h4>现在你只需要做</h4>
+        <div class="single">
+          🎯 选博客平台
+        </div>
+        <div class="af-timer" style="margin:0 auto"><span class="dot"></span>15:00</div>
+        <p style="margin-top:14px;font-size:12px;color:#8b949e;text-align:center;line-height:1.6">
+          其他的，下一个 15 分钟<br>再说。
+        </p>
+      </div>
+    </div>
+
+    <div class="notes">闭环开场。要让观众意识到：不是产品解决了他们所有问题，而是产品帮他们跨过了"开始"这一步。</div>
+  </section>
+
+  <!-- ============ SLIDE 14 · 大字定格 ============ -->
+  <section class="slide">
+    <div class="oc-cbg"></div>
+    <div class="oc-cgrid"></div>
+    <div class="oc-snum">14 / 14</div>
+    <div class="oc-tag">● 最后一句话</div>
+
+    <h1 class="oc-huge" style="margin-top:10px">把<span class="oc-g">大目标</span>，</h1>
+    <h1 class="oc-huge">变成<span class="oc-g-warm">下一步</span>。</h1>
+
+    <p class="oc-sub" style="margin-top:40px">
+      如果它刚好也能帮你跨过"开始"这一步，<br>那它就已经值了。
+    </p>
+
+    <div class="af-cta-row" style="margin-top:36px">
+      <span class="af-cta">🌐 bearjojo.com</span>
+      <span class="af-cta">⭐ github.com/xxc4321</span>
+    </div>
+
+    <div class="notes">定格标语。不讲功能、不列卖点，只留一句话在观众脑子里。</div>
+  </section>
+
+</div>
+
+<script src="assets/runtime.js"></script>
+<script>
+/* 鼠标滚轮 / 触控板 = 翻页 · 防抖
+ * deltaY > 0 → 下一页（ArrowRight）
+ * deltaY < 0 → 上一页（ArrowLeft）
+ * 通过 dispatchEvent(KeyboardEvent) 复用 runtime.js 已有的 nav 逻辑。
+ */
+(function(){
+  if (new URLSearchParams(location.search).has('preview')) return;
+
+  const LOCK_MS = 950;       // 一次翻页后锁住的时间（略大于过渡时长）
+  const FIRE_THRESHOLD = 18; // 一次触发需要累积的滚动量（过滤微抖动）
+  const RESET_MS = 180;      // 停止滚动多久后清零累积
+
+  let locked = false;
+  let accum = 0;
+  let lastWheelAt = 0;
+  let resetTimer = null;
+
+  function trigger(dir){
+    locked = true;
+    accum = 0;
+    setTimeout(() => { locked = false; }, LOCK_MS);
+    document.dispatchEvent(new KeyboardEvent('keydown', {
+      key: dir > 0 ? 'ArrowRight' : 'ArrowLeft',
+      bubbles: true, cancelable: true
+    }));
+  }
+
+  window.addEventListener('wheel', function(e){
+    // 有 overlay 打开时让原生滚动生效
+    const noteOpen = document.querySelector('.notes-overlay.open');
+    const ovOpen = document.querySelector('.overview.open');
+    if (noteOpen || ovOpen) return;
+
+    e.preventDefault();
+
+    const now = Date.now();
+    // 超过 RESET_MS 未触发 = 一次新滑动开始
+    if (now - lastWheelAt > RESET_MS) accum = 0;
+    lastWheelAt = now;
+
+    if (locked) return;
+
+    accum += e.deltaY;
+    clearTimeout(resetTimer);
+    resetTimer = setTimeout(() => { accum = 0; }, RESET_MS);
+
+    if (accum >= FIRE_THRESHOLD) trigger(+1);
+    else if (accum <= -FIRE_THRESHOLD) trigger(-1);
+  }, { passive: false });
+
+  /* 触屏上滑/下滑也翻页 */
+  let touchStartY = null;
+  window.addEventListener('touchstart', function(e){
+    if (e.touches.length === 1) touchStartY = e.touches[0].clientY;
+  }, { passive: true });
+  window.addEventListener('touchend', function(e){
+    if (touchStartY === null) return;
+    const endY = (e.changedTouches[0] || {}).clientY;
+    if (endY == null) { touchStartY = null; return; }
+    const dy = touchStartY - endY; // 手指上滑为正
+    touchStartY = null;
+    if (locked) return;
+    if (Math.abs(dy) < 40) return;
+    trigger(dy > 0 ? +1 : -1);
+  }, { passive: true });
+})();
+</script>
+</body>
+</html>
