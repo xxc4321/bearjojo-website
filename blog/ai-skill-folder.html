@@ -1,0 +1,1199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="一份关于 AI 概念边界滑动的深度调研：从 Alexa Skills 到 Anthropic Skills，十年间 skill 这个词被悄悄改写了三次。" />
+  <meta name="author" content="Bearjojo & ClaudeCode" />
+  <meta name="theme-color" content="#0d1117" media="(prefers-color-scheme: dark)" />
+
+  <meta property="og:title" content="你说的&quot;AI 技能&quot;，其实是个文件夹 | BearJojo 博客" />
+  <meta property="og:description" content="从 Alexa Skills 到 Anthropic Skills，十年间 skill 这个词被悄悄改写了三次。多数人以为他们在谈论同一件事。" />
+  <meta property="og:type" content="article" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <title>你说的"AI 技能"，其实是个文件夹 | BearJojo 博客</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Noto+Serif+SC:wght@400;600;700&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../index.css?v=1.2" />
+  <style>
+    /* ============== ARTICLE LAYOUT ============== */
+    body { background: #0d1117; }
+    .article-wrap { max-width: 1240px; margin: 0 auto; padding: 0 24px; }
+
+    /* Reading progress */
+    .read-progress {
+      position: fixed; top: 0; left: 0; height: 3px; width: 0;
+      background: linear-gradient(90deg, #7c3aed, #00f5ff, #ff00ff);
+      z-index: 999; transition: width .1s linear;
+      box-shadow: 0 0 12px rgba(124,58,237,.6);
+    }
+
+    /* Hero */
+    .article-hero {
+      position: relative;
+      padding: 80px 0 60px;
+      margin-bottom: 60px;
+      overflow: hidden;
+      border-bottom: 1px solid rgba(48,54,61,.6);
+    }
+    .article-hero::before {
+      content: '';
+      position: absolute; inset: 0;
+      background:
+        radial-gradient(900px 500px at 30% 20%, rgba(124,58,237,.18), transparent 60%),
+        radial-gradient(700px 400px at 80% 80%, rgba(255,0,255,.12), transparent 60%),
+        radial-gradient(600px 300px at 60% 50%, rgba(0,245,255,.08), transparent 60%);
+      pointer-events: none;
+    }
+    .article-hero::after {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,.04) 1px, transparent 1px);
+      background-size: 48px 48px;
+      mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 30%, transparent 80%);
+      -webkit-mask-image: radial-gradient(ellipse 80% 70% at 50% 50%, #000 30%, transparent 80%);
+      pointer-events: none;
+    }
+    .hero-inner { position: relative; max-width: 820px; margin: 0 auto; text-align: center; z-index: 2; }
+    .hero-kicker {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 6px 14px;
+      background: rgba(124,58,237,.12);
+      border: 1px solid rgba(168,85,247,.4);
+      border-radius: 999px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .18em;
+      color: #c4b5fd;
+      margin-bottom: 28px;
+    }
+    .hero-kicker .dot { width: 6px; height: 6px; border-radius: 50%; background: #a855f7; box-shadow: 0 0 12px rgba(168,85,247,.8); }
+    .hero-title {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(34px, 5.4vw, 64px);
+      font-weight: 800;
+      line-height: 1.18;
+      letter-spacing: -0.01em;
+      color: #f0f6fc;
+      margin: 0 0 18px;
+    }
+    .hero-title .accent {
+      background: linear-gradient(135deg, #00f5ff 0%, #a855f7 50%, #ff00ff 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .hero-sub {
+      font-size: clamp(15px, 1.5vw, 18px);
+      color: #8b949e;
+      line-height: 1.7;
+      max-width: 640px;
+      margin: 0 auto 36px;
+    }
+    .hero-meta {
+      display: inline-flex;
+      align-items: center;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 14px;
+      font-size: 13px;
+      color: #8b949e;
+      padding: 14px 22px;
+      background: rgba(22,27,34,.6);
+      border: 1px solid rgba(48,54,61,.7);
+      border-radius: 999px;
+      backdrop-filter: blur(8px);
+    }
+    .hero-meta strong { color: #c4b5fd; font-weight: 600; }
+    .hero-meta .dvd { width: 4px; height: 4px; border-radius: 50%; background: #30363d; }
+
+    /* Hero visual: skill x 3 */
+    .hero-visual {
+      position: relative;
+      max-width: 760px;
+      margin: 60px auto 0;
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 12px;
+      z-index: 2;
+    }
+    .hero-visual .step {
+      padding: 24px 20px 20px;
+      border-radius: 14px;
+      background: rgba(22,27,34,.72);
+      border: 1px solid rgba(48,54,61,.7);
+      backdrop-filter: blur(8px);
+      text-align: center;
+    }
+    .hero-visual .yr { font-family: 'JetBrains Mono', monospace; font-size: 11px; letter-spacing: .14em; color: #6e7681; margin-bottom: 8px; }
+    .hero-visual .word { font-size: 30px; font-weight: 800; line-height: 1; margin-bottom: 10px; font-family: 'Inter', sans-serif; letter-spacing: -.01em; }
+    .hero-visual .word.s1 { color: #4d4d4d; }
+    .hero-visual .word.s2 { color: #a855f7; text-shadow: 0 0 24px rgba(168,85,247,.4); }
+    .hero-visual .word.s3 { background: linear-gradient(135deg,#00f5ff,#ff00ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .hero-visual .means { font-size: 12px; color: #8b949e; line-height: 1.5; }
+
+    /* Article body grid */
+    .article-grid {
+      display: grid;
+      grid-template-columns: 220px minmax(0, 760px);
+      gap: 64px;
+      max-width: 1100px;
+      margin: 0 auto;
+      align-items: start;
+      padding: 0 0 100px;
+    }
+
+    /* TOC — AI blue, hierarchical with carets */
+    .toc {
+      position: sticky;
+      top: 80px;
+      max-height: calc(100vh - 100px);
+      overflow-y: auto;
+      padding-right: 12px;
+      font-family: 'Inter', sans-serif;
+    }
+    .toc::-webkit-scrollbar { width: 4px; }
+    .toc::-webkit-scrollbar-thumb { background: #1F2937; border-radius: 2px; }
+    .toc-title {
+      font-size: 11px;
+      letter-spacing: .22em;
+      color: #6b7280;
+      font-weight: 600;
+      margin-bottom: 22px;
+      font-family: 'JetBrains Mono', monospace;
+    }
+    .toc-section { margin-bottom: 6px; }
+    .toc-chapter {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 4px;
+      font-size: 14px;
+      font-weight: 500;
+      color: #e5e7eb !important;
+      text-decoration: none !important;
+      cursor: pointer;
+      user-select: none;
+      transition: color .2s ease;
+      border-radius: 6px;
+    }
+    .toc-chapter:hover { color: #60A5FA !important; }
+    .toc-chapter.active { color: #60A5FA !important; }
+    .toc-chapter .caret {
+      width: 14px;
+      display: inline-flex;
+      justify-content: center;
+      color: #6b7280;
+      font-size: 9px;
+      transition: transform .2s ease;
+      flex-shrink: 0;
+    }
+    .toc-chapter.collapsed .caret { transform: rotate(-90deg); }
+    .toc-chapter.no-caret { padding-left: 4px; }
+    .toc-chapter.no-caret .caret { display: none; }
+    .toc-sublist {
+      list-style: none;
+      padding: 4px 0 8px 28px;
+      margin: 0;
+      overflow: hidden;
+      transition: max-height .25s ease;
+    }
+    .toc-section.collapsed .toc-sublist { display: none; }
+    .toc-sublist li { padding: 0; margin-bottom: 2px; }
+    .toc-sublist a {
+      font-size: 13px;
+      color: #9CA3AF !important;
+      text-decoration: none !important;
+      padding: 6px 12px;
+      display: block;
+      border-radius: 6px;
+      line-height: 1.4;
+      transition: all .15s ease;
+    }
+    .toc-sublist a:hover {
+      color: #93C5FD !important;
+      background: rgba(96,165,250,.06);
+    }
+    .toc-sublist a.active {
+      color: #60A5FA !important;
+      background: rgba(96,165,250,.1);
+      font-weight: 500;
+    }
+    .toc-yr { color: #6b7280; font-family: 'JetBrains Mono', monospace; font-size: 11.5px; margin-right: 6px; }
+
+    /* Article prose */
+    .prose {
+      font-family: 'Inter', 'Noto Serif SC', sans-serif;
+      color: #c9d1d9;
+      font-size: 17px;
+      line-height: 1.85;
+      letter-spacing: 0.005em;
+    }
+    .prose p { margin: 0 0 22px; }
+    .prose strong { color: #f0f6fc; font-weight: 700; }
+    .prose em { color: #c4b5fd; font-style: italic; }
+    .prose a { color: #00f5ff; text-decoration: none; border-bottom: 1px solid rgba(0,245,255,.3); transition: border-color .2s ease; }
+    .prose a:hover { border-bottom-color: #00f5ff; }
+    .prose ul, .prose ol { margin: 0 0 24px; padding-left: 26px; }
+    .prose li { margin-bottom: 8px; }
+    .prose hr {
+      border: 0;
+      height: 1px;
+      background: linear-gradient(90deg, transparent, rgba(124,58,237,.4), transparent);
+      margin: 56px 0;
+    }
+    .prose code, .prose kbd {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: .9em;
+      padding: 2px 6px;
+      background: rgba(124,58,237,.14);
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: 5px;
+      color: #c4b5fd;
+    }
+
+    /* Lead paragraph (intro) */
+    .lead { font-size: 19px; color: #c9d1d9; }
+    .lead p:first-child::first-letter {
+      font-family: 'Noto Serif SC', serif;
+      font-weight: 800;
+      font-size: 64px;
+      float: left;
+      line-height: 0.9;
+      padding-right: 12px;
+      padding-top: 6px;
+      background: linear-gradient(135deg,#7c3aed,#ff00ff);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    /* Chapter heading */
+    .chapter {
+      margin: 80px 0 36px;
+      padding-top: 24px;
+    }
+    .chapter-num {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .2em;
+      color: #6e7681;
+      margin-bottom: 6px;
+    }
+    .chapter-num .bar {
+      display: inline-block;
+      width: 32px;
+      height: 1px;
+      background: linear-gradient(90deg, #7c3aed, transparent);
+      vertical-align: middle;
+      margin-right: 10px;
+    }
+    .chapter h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(28px, 3vw, 36px);
+      font-weight: 800;
+      color: #f0f6fc;
+      line-height: 1.2;
+      margin: 0 0 14px;
+      letter-spacing: -0.005em;
+    }
+    .chapter h2 .accent { background: linear-gradient(135deg,#a855f7,#ff00ff); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+    .chapter-tag {
+      display: inline-block;
+      padding: 3px 10px;
+      font-size: 12px;
+      color: #c4b5fd;
+      background: rgba(124,58,237,.1);
+      border: 1px solid rgba(124,58,237,.25);
+      border-radius: 999px;
+    }
+
+    /* Section heading */
+    .prose h3 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin: 56px 0 14px;
+      line-height: 1.35;
+    }
+    .prose h3 .num {
+      color: #6e7681;
+      font-family: 'JetBrains Mono', monospace;
+      font-weight: 500;
+      font-size: .8em;
+      margin-right: 8px;
+    }
+    .prose h4 {
+      font-size: 18px;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin: 36px 0 10px;
+    }
+
+    /* Pull quote */
+    .pullquote {
+      position: relative;
+      margin: 32px 0;
+      padding: 20px 28px;
+      border-left: 3px solid;
+      border-image: linear-gradient(180deg, #00f5ff, #ff00ff) 1;
+      background: linear-gradient(90deg, rgba(124,58,237,.06), transparent);
+      font-family: 'Noto Serif SC', serif;
+      font-size: 18px;
+      font-style: italic;
+      color: #f0f6fc;
+      line-height: 1.7;
+    }
+    .pullquote .src {
+      display: block;
+      margin-top: 10px;
+      font-style: normal;
+      font-size: 13px;
+      color: #8b949e;
+      letter-spacing: 0.02em;
+    }
+
+    /* Callout box (truths) */
+    .truth {
+      position: relative;
+      margin: 36px 0;
+      padding: 28px 32px;
+      background: linear-gradient(135deg, rgba(124,58,237,.08), rgba(255,0,255,.04));
+      border: 1px solid rgba(124,58,237,.3);
+      border-radius: 16px;
+    }
+    .truth::before {
+      content: '';
+      position: absolute; top: 0; left: 0; right: 0; height: 2px;
+      background: linear-gradient(90deg, #7c3aed, #00f5ff, #ff00ff);
+      border-radius: 16px 16px 0 0;
+    }
+    .truth-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .2em;
+      color: #00f5ff;
+      margin-bottom: 8px;
+    }
+    .truth p:last-child { margin-bottom: 0; }
+    .truth strong { color: #fff; }
+
+    /* Comparison table */
+    .prose table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 28px 0;
+      font-size: 14.5px;
+      background: rgba(22,27,34,.5);
+      border: 1px solid rgba(48,54,61,.7);
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .prose thead { background: linear-gradient(135deg, rgba(124,58,237,.18), rgba(255,0,255,.1)); }
+    .prose th {
+      padding: 12px 16px;
+      text-align: left;
+      font-weight: 600;
+      color: #f0f6fc;
+      font-size: 13px;
+      letter-spacing: .03em;
+      border-bottom: 1px solid rgba(48,54,61,.7);
+    }
+    .prose td {
+      padding: 12px 16px;
+      vertical-align: top;
+      color: #c9d1d9;
+      border-bottom: 1px solid rgba(48,54,61,.5);
+    }
+    .prose tr:last-child td { border-bottom: 0; }
+    .prose td strong { color: #c4b5fd; }
+
+    /* Insight callout (bold inline statement) */
+    .insight {
+      margin: 28px 0;
+      padding: 18px 22px;
+      border-left: 3px solid #00f5ff;
+      background: rgba(0,245,255,.05);
+      font-size: 16.5px;
+      color: #f0f6fc;
+      border-radius: 0 10px 10px 0;
+    }
+
+    /* Block quote ">" lines */
+    .prose blockquote {
+      margin: 24px 0;
+      padding: 14px 22px;
+      border-left: 3px solid rgba(124,58,237,.5);
+      background: rgba(124,58,237,.05);
+      color: #c9d1d9;
+      border-radius: 0 8px 8px 0;
+      font-size: 15.5px;
+      line-height: 1.7;
+    }
+    .prose blockquote p:last-child { margin: 0; }
+    .prose blockquote em { color: #c4b5fd; }
+    .prose blockquote .src { display: block; margin-top: 8px; color: #8b949e; font-size: 12.5px; font-style: normal; }
+
+    /* References — card-style with icon + arrow */
+    .refs {
+      margin-top: 80px;
+      padding-top: 40px;
+      border-top: 1px solid #1F2937;
+    }
+    .refs h2 {
+      font-family: 'Noto Serif SC', serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: #f0f6fc;
+      margin: 0 0 8px;
+    }
+    .refs-sub { font-size: 13px; color: #6b7280; margin-bottom: 32px; }
+    .refs-group { margin-bottom: 32px; }
+    .refs-group h4 {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      font-family: 'Inter', sans-serif;
+      font-size: 14px;
+      letter-spacing: 0.01em;
+      color: #e5e7eb;
+      font-weight: 600;
+      margin: 0 0 14px;
+      text-transform: none;
+    }
+    .refs-group h4::before {
+      content: '';
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: #60A5FA;
+      box-shadow: 0 0 10px rgba(96,165,250,.5);
+      flex-shrink: 0;
+    }
+    .refs ul { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 8px; }
+    .refs li { margin: 0; padding: 0; border: 0; }
+    .refs li a.ref-card {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      padding: 16px 20px;
+      background: #111827;
+      border: 1px solid #1F2937;
+      border-radius: 10px;
+      text-decoration: none !important;
+      color: inherit !important;
+      transition: all .2s ease;
+    }
+    .refs li a.ref-card:hover {
+      border-color: rgba(96,165,250,.4);
+      background: #16202E;
+      transform: translateX(2px);
+    }
+    .refs .ref-icon {
+      flex-shrink: 0;
+      width: 36px; height: 36px;
+      display: flex; align-items: center; justify-content: center;
+      background: rgba(96,165,250,.08);
+      border: 1px solid rgba(96,165,250,.2);
+      border-radius: 8px;
+      color: #60A5FA;
+    }
+    .refs li a.ref-card:hover .ref-icon {
+      background: rgba(96,165,250,.14);
+      border-color: rgba(96,165,250,.4);
+    }
+    .refs .ref-icon svg { width: 18px; height: 18px; }
+    .refs .ref-text { flex: 1; min-width: 0; }
+    .refs .ref-text .ref-title {
+      display: block;
+      color: #E5E7EB;
+      font-size: 15px;
+      font-weight: 500;
+      line-height: 1.4;
+      margin-bottom: 4px;
+      letter-spacing: 0.005em;
+      border: 0;
+    }
+    .refs li a.ref-card:hover .ref-title { color: #93C5FD; }
+    .refs .ref-text .ref-desc {
+      display: block;
+      color: #9CA3AF;
+      font-size: 13px;
+      line-height: 1.5;
+      margin: 0;
+    }
+    .refs .ref-arrow {
+      flex-shrink: 0;
+      color: #6b7280;
+      font-size: 16px;
+      transition: all .2s ease;
+    }
+    .refs li a.ref-card:hover .ref-arrow {
+      color: #60A5FA;
+      transform: translateX(4px);
+    }
+
+    /* End mark */
+    .endmark {
+      margin: 80px 0 0;
+      text-align: center;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      letter-spacing: .3em;
+      color: #6e7681;
+    }
+    .endmark::before, .endmark::after { content: ''; display: inline-block; width: 60px; height: 1px; background: rgba(124,58,237,.4); vertical-align: middle; margin: 0 18px; }
+
+    /* Back-to-blog (fixed top-left) — pill button, AI blue hover */
+    .back-link {
+      position: fixed;
+      top: 24px; left: 24px;
+      z-index: 100;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 13px;
+      font-weight: 500;
+      color: #E5E7EB !important;
+      text-decoration: none !important;
+      background: rgba(17,24,39,.85);
+      padding: 9px 18px;
+      border-radius: 999px;
+      border: 1px solid #1F2937;
+      backdrop-filter: blur(10px);
+      transition: all .2s ease;
+    }
+    .back-link:hover {
+      color: #60A5FA !important;
+      border-color: rgba(96,165,250,.5);
+      background: rgba(96,165,250,.08);
+    }
+    .back-link .arrow { transition: transform .2s ease; }
+    .back-link:hover .arrow { transform: translateX(-3px); }
+
+    /* Inline highlight (key terms) */
+    .hl {
+      background: linear-gradient(180deg, transparent 60%, rgba(255,0,255,.18) 60%);
+      padding: 0 2px;
+    }
+
+    @media (max-width: 960px) {
+      .article-grid { grid-template-columns: 1fr; gap: 0; }
+      .toc { display: none; }
+    }
+    @media (max-width: 640px) {
+      .article-hero { padding: 60px 0 40px; }
+      .hero-visual { grid-template-columns: 1fr; }
+      .prose { font-size: 16px; }
+      .prose h3 { font-size: 21px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="read-progress" id="readProgress"></div>
+  <a href="../blog.html" class="back-link"><span class="arrow" aria-hidden="true">←</span><span>返回博客</span></a>
+
+  <article class="article-wrap">
+
+    <!-- ============ HERO ============ -->
+    <header class="article-hero">
+      <div class="hero-inner">
+        <div class="hero-kicker"><span class="dot"></span> 深度调研 · CONCEPT FORENSICS</div>
+        <h1 class="hero-title">
+          你说的"AI 技能"，<br>其实是个<span class="accent">文件夹</span>
+        </h1>
+        <p class="hero-sub">
+          一份关于 AI 概念边界滑动的深度调研报告。<br>
+          从 Alexa Skills 到 Anthropic Skills，十年间 "skill" 这个词被悄悄改写了三次 —— 多数人以为他们在谈论同一件事。
+        </p>
+        <div class="hero-meta">
+          <span>📝 作者：<strong>Bearjojo &amp; ClaudeCode</strong></span>
+          <span class="dvd"></span>
+          <span>2026.04.25</span>
+          <span class="dvd"></span>
+          <span>约 18 分钟阅读</span>
+          <span class="dvd"></span>
+          <span>13 引用</span>
+        </div>
+
+        <div class="hero-visual" aria-hidden="true">
+          <div class="step">
+            <div class="yr">2014—2017</div>
+            <div class="word s1">skill</div>
+            <div class="means">REST 端点<br>装在助手里的 web app</div>
+          </div>
+          <div class="step">
+            <div class="yr">2023—2024</div>
+            <div class="word s2">skill</div>
+            <div class="means">Function Calling<br>Plugins / GPTs / Tools</div>
+          </div>
+          <div class="step">
+            <div class="yr">2025.10 起</div>
+            <div class="word s3">skill</div>
+            <div class="means">渐进式披露的文件夹<br>SKILL.md + 资源</div>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <!-- ============ BODY ============ -->
+    <div class="article-grid">
+
+      <!-- TOC -->
+      <nav class="toc" aria-label="目录">
+        <div class="toc-title">CONTENTS</div>
+
+        <a href="#intro" class="toc-chapter no-caret">
+          <span>引子</span>
+        </a>
+
+        <div class="toc-section" data-collapsible="true">
+          <a href="#ch1" class="toc-chapter">
+            <span class="caret" aria-hidden="true">▼</span>
+            <span>第一章：词源考古</span>
+          </a>
+          <ul class="toc-sublist">
+            <li><a href="#ch1-1"><span class="toc-yr">2014：</span>Alexa Skills</a></li>
+            <li><a href="#ch1-2"><span class="toc-yr">2023：</span>Function Calling</a></li>
+            <li><a href="#ch1-3"><span class="toc-yr">2025：</span>Anthropic Skills</a></li>
+          </ul>
+        </div>
+
+        <div class="toc-section" data-collapsible="true">
+          <a href="#ch2" class="toc-chapter">
+            <span class="caret" aria-hidden="true">▼</span>
+            <span>第二章：边界混乱</span>
+          </a>
+          <ul class="toc-sublist">
+            <li><a href="#ch2-1">vs Model</a></li>
+            <li><a href="#ch2-2">vs Prompt</a></li>
+            <li><a href="#ch2-3">vs Context</a></li>
+            <li><a href="#ch2-4">vs Harness</a></li>
+            <li><a href="#ch2-5">vs Agent / Workflow</a></li>
+          </ul>
+        </div>
+
+        <a href="#ch3" class="toc-chapter no-caret">
+          <span>第三章：三个真相</span>
+        </a>
+        <a href="#ch4" class="toc-chapter no-caret">
+          <span>第四章：流沙之上</span>
+        </a>
+        <a href="#end" class="toc-chapter no-caret">
+          <span>结语：三个问题</span>
+        </a>
+        <a href="#refs" class="toc-chapter no-caret">
+          <span>资料来源</span>
+        </a>
+      </nav>
+
+      <!-- PROSE -->
+      <main class="prose">
+
+        <!-- Intro -->
+        <section id="intro" class="lead">
+          <h3 style="margin-top:0">引子：你的笔记，其实是一把钥匙</h3>
+          <p>你在笔记里写下：<strong>"要理解一个词，不能只理解它当下的含义，而是要理解它始终处于动态变化之中，它的范围在不断调整。"</strong></p>
+          <p>这句话不是哲学，是观测报告。</p>
+          <p>Mark Pagel 用 6000 年的语言演变证明了它：高频词稳如化石，低频词流动如沙。Joshua Conrad Jackson 找到了流速的加速器：负面情绪让一个词的"半衰期"减半。凯文·凯利干脆把它命名为时代的底色 —— "形成"（Becoming）和"流"（Flow）。</p>
+          <div class="insight">
+            <strong>但他们都在描述自然语言。</strong>没人告诉你，在 AI 领域，这种偷换是按年计算的，而且偷换者就站在你面前 —— 他们叫 Amazon、Microsoft、OpenAI、Anthropic。
+          </div>
+          <p>今天我们解剖的样本，是一个看似无害的英文单词：<code>skill</code>（技能）。</p>
+          <p>它在 2014 年是一个东西。<br>在 2023 年是另一个东西。<br>在 2025 年 10 月之后，变成了第三个东西。<br>而你以为你在用它指代同一件事。</p>
+          <p>这就是这份报告的起点。</p>
+        </section>
+
+        <hr>
+
+        <!-- Chapter 1 -->
+        <section id="ch1" class="chapter">
+          <div class="chapter-num"><span class="bar"></span>CHAPTER 01</div>
+          <h2>词源考古：<span class="accent">"skill"</span> 的三次借尸还魂</h2>
+          <span class="chapter-tag">追溯 · 2014 → 2025</span>
+        </section>
+
+        <h3>词典定义：祖先的样子</h3>
+        <p><code>skill /skɪl/</code> n. <em>能力、技艺、熟练程度。</em></p>
+        <p>字典里的 skill 是<strong>人</strong>的属性。它是名词，但根植于经验 —— 你不能"安装"一项技能，只能"习得"。</p>
+        <p>记住这个原始含义。后面三次借尸还魂，<strong class="hl">没有一次真正回到了它</strong>。</p>
+
+        <h3 id="ch1-1"><span class="num">1.1</span>第一次借尸（2014—2017）：Alexa Skills —— 其实是"语音应用"</h3>
+        <p>2014 年 Amazon 推出 Echo，随后开放了 Alexa Skills Kit (ASK)。开发者可以为 Alexa "添加 skills"。2017 年微软在 Build 大会跟进，发布 Cortana Skills Kit。</p>
+        <p><strong>但这里的 skill 是什么？</strong></p>
+        <p>技术文档说得很清楚：从架构上看，一个 skill 就是一个 <code>REST endpoint</code>。当用户说 <em>"Alexa, ask Domino's to order a pizza"</em>，Alexa 把语音转成 JSON，POST 到你的 HTTP 端点。你的服务器返回 JSON，Alexa 念出来。</p>
+        <blockquote>
+          <em>"From a technical perspective, skills are basically REST endpoints."</em>
+          <span class="src">— Microsoft Developer Documentation</span>
+        </blockquote>
+        <p>换句话说，<strong>Alexa Skills 是 web app 的伪装</strong>。它不是"技能"，是"应用商店里的应用" —— 只是入口从触屏变成了麦克风。</p>
+        <p>之所以被叫 skill 而不是 app，是营销修辞：让助手听起来像"会做事的人"而不是"装了一堆 app 的设备"。这是第一次偷换：<strong class="hl">把"产品"叫成了"能力"。</strong></p>
+        <p>这一波 skill 在 2020 年后逐渐式微。Cortana Skills Kit 2021 年关停。Alexa Skills 仍在，但被边缘化。它们的命运注定：<strong>当大模型出现，装在助手里的"app"全部过时了</strong> —— 你不再需要为每个意图写一个 endpoint，模型自己就能理解和执行。</p>
+        <div class="insight">第一个 skill 死了。但词没死，这是它的第一次重生。</div>
+
+        <h3 id="ch1-2"><span class="num">1.2</span>第二次借尸（2023—2024）：隐性的 skill —— Function Calling、Plugins、GPTs</h3>
+        <p>2023 年 OpenAI 发布 Function Calling 和 Plugins，后来又有 GPTs。</p>
+        <p>OpenAI 没有用 "skill" 这个词。但社区开始把这些东西类比为 <em>"GPT 的 skills"</em> —— 能扩展能力的外挂模块。</p>
+        <p><strong>这次借尸的本质是什么？</strong></p>
+        <p>它把"skill"从<strong>应用层</strong>（Alexa）拉到了<strong>模型层</strong>（LLM）。但本质仍然是"接口的伪装"：Function Calling 是 JSON Schema 描述的函数签名，Plugins 是 OpenAPI 规范的 web service。</p>
+        <p>这一波"skill"的特征：</p>
+        <ul>
+          <li>由模型在推理过程中<strong>决定何时调用</strong></li>
+          <li>通过结构化协议（JSON Schema）与外部连接</li>
+          <li>仍然是<strong>外部代码 + 内部决策</strong>的二分法</li>
+        </ul>
+        <p>但它没成为标准词。OpenAI 叫 "tools"，社区叫 "plugins"，有人叫 "actions"（GPTs）。<strong class="hl">词的混乱本身，就是边界模糊的证据。</strong></p>
+        <p>直到 Anthropic 在 2024 年 11 月端出 Model Context Protocol (MCP)，才把"工具"这一层标准化。MCP 是"工具的开放协议"，它清晰地占据了<strong>"模型如何与外部世界连接"</strong>这条赛道。</p>
+        <p>那么，留给"skill"的空间是什么？</p>
+        <div class="insight"><strong>Anthropic 看到了一个未被定义的位置</strong> —— "模型如何被教会做某件事" —— 并把"skill"塞了进去。</div>
+
+        <h3 id="ch1-3"><span class="num">1.3</span>第三次借尸（2025 年 10 月起）：Anthropic Skills —— "渐进式披露的知识包"</h3>
+        <p>2025 年 10 月，Anthropic 发布 Agent Skills。<br>2025 年 12 月 18 日，把它定为开放标准。</p>
+        <p><strong>官方定义：</strong></p>
+        <blockquote><em>"Agent Skills are organized folders of instructions, scripts, and resources that agents can discover and load dynamically to perform better at specific tasks."</em></blockquote>
+        <p>翻译过来：<strong>Skill 是一个文件夹</strong>。里面必须有一个 <code>SKILL.md</code>，可以附带 Python/Bash 脚本、参考文档、模板资源。</p>
+        <p>但这只是壳。真正的革命在内部机制 —— <strong class="hl">Progressive Disclosure（渐进式披露）</strong>：</p>
+        <table>
+          <thead>
+            <tr><th style="width:80px">层级</th><th>内容</th><th>加载时机</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>L1</strong></td><td>YAML frontmatter（name + description，限字数）</td><td>永远在 system prompt</td></tr>
+            <tr><td><strong>L2</strong></td><td>SKILL.md 主体内容</td><td>Claude 判断相关时才加载</td></tr>
+            <tr><td><strong>L3</strong></td><td>引用的子文件、脚本、资源</td><td>按需触达</td></tr>
+          </tbody>
+        </table>
+        <p>这个三层结构，让 skill <strong>可以无限大</strong> —— 因为模型不会一次性把它装进上下文窗口。</p>
+        <blockquote>
+          <em>"The amount of context that can be bundled into a skill is effectively unbounded."</em>
+          <span class="src">— Anthropic Engineering Blog</span>
+        </blockquote>
+        <p>到这里，你以为我要赞美这个设计。</p>
+        <p class="pullquote">不。我要告诉你它的真相：<strong>Anthropic Skills 本质上仍然是 prompt</strong> —— 只是穿上了文件系统的衣服。</p>
+
+        <hr>
+
+        <!-- Chapter 2 -->
+        <section id="ch2" class="chapter">
+          <div class="chapter-num"><span class="bar"></span>CHAPTER 02</div>
+          <h2>边界混乱：skill 与它的 <span class="accent">五个邻居</span></h2>
+          <span class="chapter-tag">辨析 · skill ↔ model / prompt / context / harness / agent</span>
+        </section>
+        <p>业界文章在反复争论：skill 和 agent 哪个大？skill 是 prompt 还是 tool？MCP 和 skill 怎么区分？</p>
+        <p><strong class="hl">这种混乱不是偶然</strong> —— 它是因为这五个概念其实在抢占同一片认知空间。</p>
+
+        <h3 id="ch2-1"><span class="num">2.1</span>skill vs <em>Model</em>：谁才是真正的"能力"持有者？</h3>
+        <ul>
+          <li><strong>模型（Model）</strong>：神经网络权重。Claude Opus 4.7 有它的"能力天花板" —— 它能写多好的代码、它的推理深度、它的知识截止日期。</li>
+          <li><strong>Skill</strong>：外置的指令包。它<strong>不会让模型变聪明</strong>，只会让模型在某个具体任务上少犯错。</li>
+        </ul>
+        <div class="insight"><strong>关键洞察</strong>：Skill 是模型的"外置记忆"，不是"能力升级"。</div>
+        <p>如果模型本来就不会某件事（比如解一个超出训练数据的数学难题），给它一万个 skill 也没用。Skill 只能在<strong>"模型有潜力做对，但默认会做错"</strong>的位置上发挥作用 —— 那是一片<strong>经验差（experience gap）</strong>的区域，不是<strong>能力差（capability gap）</strong>。</p>
+        <p>很多人以为装上 skill 就让 Claude 变成了"专家"。错了。<strong class="hl">Claude 还是 Claude，只是有人在它身后递条子。</strong></p>
+
+        <h3 id="ch2-2"><span class="num">2.2</span>skill vs <em>Prompt</em>：他们其实是同一个东西穿着不同的衣服</h3>
+        <p>让我直接引述 Lee Han Chung 的深度剖析：</p>
+        <blockquote>
+          <em>"Skills are specialized prompt templates that inject domain-specific instructions into the conversation context...not executable code. They do NOT run Python or JavaScript [by themselves]."</em>
+        </blockquote>
+        <p>读懂了吗？<strong>Skill 不是代码，是 prompt 模板。</strong></p>
+        <p>它和你写在系统提示里的指令在本质上完全一样 —— 都是文本，都通过被读入上下文窗口来影响模型行为。</p>
+        <p><strong>那它和 prompt 的区别到底是什么？</strong></p>
+        <table>
+          <thead>
+            <tr><th>维度</th><th>传统 Prompt</th><th>Skill</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>加载时机</strong></td><td>一次性全部进入上下文</td><td>按需分层加载</td></tr>
+            <tr><td><strong>组织形式</strong></td><td>单条指令或长段文本</td><td>文件夹结构，可包含多个文件</td></tr>
+            <tr><td><strong>触发方式</strong></td><td>用户/开发者主动写入</td><td>Claude 根据元数据自主判断是否加载</td></tr>
+            <tr><td><strong>复用性</strong></td><td>复制粘贴</td><td>版本化、可分发、可组合</td></tr>
+          </tbody>
+        </table>
+        <p>所以 skill 的"创新"不在内容，而在<strong>打包和加载协议</strong>。</p>
+        <p class="pullquote">这是一个被刻意忽视的真相：<strong>Skill 是 prompt 工程的工业化形态</strong> —— 就像 npm 包是 JavaScript 代码的工业化形态一样。npm 包不是"新的编程语言"，它只是让代码可以分发。Skill 不是"新的智能"，它只是让 prompt 可以分发。</p>
+
+        <h3 id="ch2-3"><span class="num">2.3</span>skill vs <em>Context</em>：skill 是"上下文工程"的具体形态</h3>
+        <p>2024 年下半年，业界流行起一个新词：<strong>Context Engineering（上下文工程）</strong>。Anthropic 自己也写了文章：<em>Effective Context Engineering for AI Agents</em>。</p>
+        <blockquote><em>"Context engineering is the practice of what you put in the context window — and how."</em></blockquote>
+        <p>那 skill 是什么？</p>
+        <p><strong>Skill 是 context engineering 的产品化形式。</strong>它把"什么时候放什么内容进上下文窗口"这个动态决策，固化成了一个静态结构（三层 progressive disclosure）。</p>
+        <p>换句话说：</p>
+        <ul>
+          <li>上下文工程是<strong>理论</strong>（怎么管理 token 预算）</li>
+          <li>Skill 是<strong>工程</strong>（把理论变成可分发的文件夹）</li>
+        </ul>
+        <p>许多人混淆了这两层。看到 skill，以为这是一种"新机制"；其实它只是把"决定加载什么"这件事，从开发者的脑子里搬到了 SKILL.md 的 metadata 字段里。</p>
+
+        <h3 id="ch2-4"><span class="num">2.4</span>skill vs <em>Harness</em>：skill 是 harness 中的"知识层"</h3>
+        <p>这是最容易混淆的对比。让我把这个新词先说清楚。</p>
+        <p><strong>Harness Engineering（挽具工程）</strong>是 2025—2026 年涌现的概念。HumanLayer 的文章 <em>Skill Issue: Harness Engineering for Coding Agents</em> 直接用了这个对比作标题 —— 意思是"如果你在抱怨 AI agent 不行，问题不在 skill，在 harness"。</p>
+        <p>定义层级：</p>
+        <div class="insight" style="font-family:'JetBrains Mono',monospace; font-size:14px; text-align:center"><strong>Harness Engineering ⊃ Context Engineering ⊃ Prompt Engineering</strong></div>
+        <p>每一层都包含前一层。Harness 是<strong>整个 agent 运行的环境</strong> —— 什么时候调子模型、如何路由、如何管理多 agent 的输出、如何处理失败、如何持久化状态。</p>
+        <p>Claude Code 本身就是一个 harness。它决定：</p>
+        <ul>
+          <li>何时调用 Read/Edit/Bash</li>
+          <li>何时压缩上下文</li>
+          <li>何时启动 sub-agent</li>
+          <li>何时加载哪个 skill</li>
+        </ul>
+        <p><strong>Skill 在 harness 内部扮演什么角色？它是 harness 决定要加载的"知识包"之一。</strong></p>
+        <p>类比：</p>
+        <table>
+          <tbody>
+            <tr><td><strong>Model</strong></td><td>发动机</td></tr>
+            <tr><td><strong>Prompt</strong></td><td>油门</td></tr>
+            <tr><td><strong>Context</strong></td><td>仪表盘和后视镜</td></tr>
+            <tr><td><strong>Skill</strong></td><td>手套箱里的说明书</td></tr>
+            <tr><td><strong>Harness</strong></td><td>整辆车的电子控制系统</td></tr>
+          </tbody>
+        </table>
+        <p>这个比喻揭示了真相：<strong class="hl">skill 在整个 AI 系统里其实只是一个不起眼的子系统</strong>。但因为它的名字最像"能力"，所以非技术人员把它当成了主角。</p>
+        <p class="pullquote">第二个真相：那个被叫做 "skill" 的东西，在 AI agent 架构里，<strong>既不在最上层（harness），也不在最下层（model），只是中间被装载的一份文档</strong>。</p>
+
+        <h3 id="ch2-5"><span class="num">2.5</span>skill vs <em>Agent / Workflow</em>：三胞胎的身份混乱</h3>
+        <p>社区里最热的争论是：skill、agent、workflow 怎么区分？</p>
+        <p>它们的尴尬在于 —— <strong>结构上几乎完全一样，都是 markdown 文件</strong>。Daniel Miessler 直接点破：</p>
+        <blockquote><em>"One reason AI systems feel confusing is that teams reuse the same words for different layers of the stack."</em></blockquote>
+        <p>清晰的边界（目前业界共识）：</p>
+        <table>
+          <thead>
+            <tr><th>概念</th><th>关键特征</th><th>类比</th></tr>
+          </thead>
+          <tbody>
+            <tr><td><strong>Skill</strong></td><td>一个<strong>封装好的能力</strong>，被调用时执行一件事</td><td>工具箱里的螺丝刀</td></tr>
+            <tr><td><strong>Workflow</strong></td><td>一个<strong>预定义的步骤序列</strong>，路径已知</td><td>装配流水线</td></tr>
+            <tr><td><strong>Agent</strong></td><td>一个<strong>自主决策的执行者</strong>，路径未知</td><td>工人</td></tr>
+          </tbody>
+        </table>
+        <p>判断准则：</p>
+        <ul>
+          <li>路径已知 → workflow</li>
+          <li>路径未知，需推理 → agent</li>
+          <li>单点能力打包 → skill</li>
+        </ul>
+        <p>但请注意：<strong>这只是 2025 年底的共识。</strong>半年后可能又变了。语言演化的速度，在 AI 领域是按月计算的。</p>
+
+        <hr>
+
+        <!-- Chapter 3 -->
+        <section id="ch3" class="chapter">
+          <div class="chapter-num"><span class="bar"></span>CHAPTER 03</div>
+          <h2>深层洞察：三个被掩盖的<span class="accent">真相</span></h2>
+          <span class="chapter-tag">挖到底层</span>
+        </section>
+        <p>到这里你已经看到了表象。现在我们挖到下面一层。</p>
+
+        <div class="truth">
+          <div class="truth-label">▎真相一</div>
+          <h4 style="margin-top:0">skill 的"创新"是包装，不是本质</h4>
+          <p>Anthropic 把 skill 设计成"文件夹 + SKILL.md + progressive disclosure"。这个组合很聪明，但<strong>它在解决的问题，不是 AI 的问题，是软件工程的问题</strong>：</p>
+          <ul>
+            <li><strong>可分发</strong>（npm-like 的包系统）</li>
+            <li><strong>可版本化</strong>（git-like 的演进）</li>
+            <li><strong>可组合</strong>（microservices-like 的解耦）</li>
+            <li><strong>可发现</strong>（metadata 让模型知道它存在）</li>
+          </ul>
+          <p>这些是<strong>包管理学</strong>的经典问题。Anthropic 把它们重新发明了一遍，然后把这个发明叫做"skill"。</p>
+          <p>为什么这么做？因为如果叫 "prompt package manager"，听起来像 2018 年的 npm，不性感。<strong class="hl">叫 skill，听起来像 AI 在长出新的能力。</strong></p>
+          <p>这是一次精心设计的命名营销。它让一个<strong>工程问题</strong>听起来像一个<strong>智能问题</strong>。</p>
+        </div>
+
+        <div class="truth">
+          <div class="truth-label">▎真相二</div>
+          <h4 style="margin-top:0">渐进式披露，在解决一个 Anthropic 不想直说的问题 —— 模型的"短期记忆"瓶颈</h4>
+          <p>为什么需要 progressive disclosure？</p>
+          <p>官方说法是 <em>"avoiding context window overload"</em> —— 避免上下文窗口溢出。</p>
+          <p>听起来很合理，直到你问：<strong>为什么会溢出？</strong></p>
+          <p>答案是：模型的<strong>有效注意力</strong>，远小于它的上下文窗口长度。Claude Opus 可能有 200K token 窗口，但当你真的塞满 200K，模型在中段的注意力会显著下降 —— 这是著名的 <em>"lost in the middle"</em> 现象，2023 年就被多篇论文证实。</p>
+          <p>所以 progressive disclosure 不是"用户体验设计"，是<strong>对模型缺陷的工程补救</strong>。它把"模型其实读不完它的窗口"这个尴尬，优雅地包装成了"我们让加载更高效"。</p>
+          <p><strong class="hl">你看到的"先进设计"，有时候是对底层缺陷的体面修补。</strong></p>
+        </div>
+
+        <div class="truth">
+          <div class="truth-label">▎真相三</div>
+          <h4 style="margin-top:0">把 skill 设为开放标准，是在抢"知识层"的控制权</h4>
+          <p>2025 年 12 月 18 日，Anthropic 把 Skills 开放为标准。</p>
+          <p>这一步的剧本和 MCP 一模一样。Anthropic 在 2024 年开放 MCP —— 抢"工具协议"的标准。一年后，他们用同样的剧本，抢"知识协议"的标准。</p>
+          <p>因为<strong>谁定义了协议，谁就定义了认知边界</strong>。</p>
+          <ul>
+            <li>当全世界的开发者都在写 SKILL.md，他们的工作就<strong>默认兼容 Claude</strong>。</li>
+            <li>当企业的内部知识都封装成 Anthropic 格式的 skill，<strong>迁移到其他 AI 的成本就高了</strong>。</li>
+            <li>当 Canva、Notion、Figma、Atlassian 都发布 Anthropic 格式的 skill（已经在做了），<strong>生态系统的引力让 OpenAI 和 Google 必须跟随</strong>。</li>
+          </ul>
+          <p>这就是为什么 Anthropic 的 skill 不只是技术，是<strong>地缘</strong>。它在用"开放"的姿态，做最封闭的事 —— <strong class="hl">让自己的内部抽象，变成行业的默认抽象</strong>。</p>
+          <p>凯文·凯利说"流动的时代，确定性在降低"。但他没说全：<strong>总有人在流动中拼命树立路标，而那些路标不是为了帮你认路，是为了让所有路最终通向他们的城。</strong></p>
+        </div>
+
+        <hr>
+
+        <!-- Chapter 4 -->
+        <section id="ch4" class="chapter">
+          <div class="chapter-num"><span class="bar"></span>CHAPTER 04</div>
+          <h2>流沙之上：你的笔记，<span class="accent">在 AI 领域兑现了</span></h2>
+          <span class="chapter-tag">把抽象拉回个人观察</span>
+        </section>
+
+        <h4>Pagel 的发现：高频词演变慢，低频词演变快</h4>
+        <p><code>skill</code> 在自然语言里是高频词 —— 它的核心含义（技艺/能力）千年未变。<br>但在 AI 子语言里，它是<strong>新生的低频词</strong> —— 所以它在十年里被重写了三次。</p>
+        <div class="insight"><strong>洞察</strong>：你看到的"AI 概念边界模糊"，不是 AI 行业不严谨，是<strong>新词没有被时间固定下来</strong>。它们仍在 Pagel 曲线的左端 —— 高速演变区。</div>
+        <p>预测：再过 5 年，如果 skill 这个词还活着，它的语义会再次稳定；如果它消失，会被另一个词替代 —— 大概率是另一个英文单词被偷换成 AI 术语，比如 <code>routine</code>、<code>capability</code>、<code>expertise</code>。</p>
+
+        <h4>Jackson 的发现：负面情绪加速词的死亡</h4>
+        <p>在 AI 领域，这个规律惊人地准确。看几个例子：</p>
+        <ul>
+          <li><strong>"Hallucination"（幻觉）</strong> —— 本是负面词，2024 年开始被各家公司换成更柔和的 <em>"confabulation"</em>、<em>"context error"</em>、<em>"groundedness issue"</em>。</li>
+          <li><strong>"Bias"（偏见）</strong> —— 被换成 <em>"alignment gap"</em>、<em>"value drift"</em>。</li>
+          <li><strong>"Bug"</strong> —— 在 AI 时代被换成 <em>"limitation"</em>、<em>"behavior"</em>、<em>"emergent property"</em>。</li>
+        </ul>
+        <p>而正面词如 <em>"capability"</em>、<em>"skill"</em>、<em>"intelligence"</em> —— 几乎没动过。</p>
+        <p><strong>洞察</strong>：你以为公司在"创新术语"，其实他们在执行 Jackson 描述的本能 —— <strong class="hl">逃避让人不舒服的词</strong>。</p>
+        <p>skill 这个词之所以被反复借尸，正是因为它<strong>听起来正面</strong>。没有人会反对自己的 AI 多一些 skill。但如果他们把它叫做 <em>"prompt template package"</em> —— 那听起来像加班的工程师文档，不会有人激动。</p>
+
+        <h4>凯文·凯利：在流沙上跳舞</h4>
+        <p>KK 的预言"一切东西都在变成别的东西" —— 在 AI 词典里被以最极端的形式兑现。</p>
+        <p>但他给了一个不那么悲观的结论：<strong>"踩在这样的流沙上，我们反而心里不慌。"</strong></p>
+        <p>为什么不慌？因为当你<strong>接受</strong>了这种流动，你不再追求"找到真正的定义"，而是开始问更有用的问题：</p>
+        <div class="insight">
+          <p style="margin-bottom:8px"><strong>旧问题：</strong>"Skill 到底是什么？"</p>
+          <p style="margin-bottom:0"><strong>新问题：</strong>"在 2025 年底这个时间点，当 Anthropic 说 skill 时，他们在指什么具体的工程结构？"</p>
+        </div>
+        <p>旧问题让你焦虑，新问题让你能干活。</p>
+
+        <h4>赫拉克利特的回响</h4>
+        <blockquote><em>"人不能两次踏进同一条河流。"</em></blockquote>
+        <p>我们今天用 skill 这个词，和 2014 年的 Echo 工程师用 skill，<strong>字形相同，语义无关</strong>。<br>我们和 2023 年讨论 ChatGPT plugins 的人用 skill，<strong>字形相同，边界不同</strong>。</p>
+        <p class="pullquote">当一个词被三次借尸还魂，我们该问的不是"哪个是真的"，而是"<strong>为什么这个词成了高价值的容器</strong>" —— 值得反复被偷换。</p>
+        <p>答案隐藏在这个词的语用学里：<strong class="hl">skill 听起来像人的属性。当我们说 AI 有 skill，我们在不知不觉中，把它人格化了。</strong></p>
+        <p>而每一次这种人格化，都让人类更容易接受 AI 的下一次扩张。</p>
+
+        <hr>
+
+        <!-- Conclusion -->
+        <section id="end" class="chapter">
+          <div class="chapter-num"><span class="bar"></span>EPILOGUE</div>
+          <h2>结语：三个让你<span class="accent">失眠的问题</span></h2>
+        </section>
+        <p>读完这份报告，如果你还能心安理得地使用 "skill" 这个词，那是你的自由。<br>但有三个问题，我希望你之后每次说出 "skill" 之前，在脑子里过一遍。</p>
+
+        <div class="truth">
+          <div class="truth-label">▎问题一</div>
+          <h4 style="margin-top:0">当我说"AI 有这个 skill"，我究竟是在说什么？</h4>
+          <p>是模型的能力？是被加载的文件？是 harness 的路由策略？是 prompt 工程的产物？</p>
+          <p><strong>你现在知道，这四个答案完全不同。</strong></p>
+        </div>
+
+        <div class="truth">
+          <div class="truth-label">▎问题二</div>
+          <h4 style="margin-top:0">我在多大程度上，被这个词的"人格化暗示"操控了？</h4>
+          <p>当 Alexa 有 100,000 个 skill 时，你下意识觉得它"很厉害"。<br>但你刚才已经看到，那些 skill 的本质是 REST endpoint。</p>
+          <p><strong class="hl">你被一个名词骗了。如果它叫 "REST 接口商店"，你不会有任何感觉。</strong></p>
+        </div>
+
+        <div class="truth">
+          <div class="truth-label">▎问题三</div>
+          <h4 style="margin-top:0">下一次，这个词会被偷换成什么？</h4>
+          <p>历史告诉我们，2027 年的 skill 大概率不是今天的 skill。</p>
+          <p><strong>当那一天到来，你会是第一批察觉的人，还是最后一批？</strong></p>
+        </div>
+
+        <hr>
+
+        <!-- Final twist -->
+        <section class="chapter">
+          <div class="chapter-num"><span class="bar"></span>FINALE</div>
+          <h2>这份报告本身，<span class="accent">是一次概念偷换的样本</span></h2>
+        </section>
+        <p>你注意到了吗？<strong>这份报告的第一页和最后一页，"skill" 这个词的内涵，已经发生了变化。</strong></p>
+        <ul>
+          <li>第一页：你以为 skill 是 <strong>AI 的能力</strong>。</li>
+          <li>最后一页：你知道 skill 是 <strong>一个被精心包装的文件夹格式</strong>。</li>
+        </ul>
+        <p>这种变化，在你脑子里发生的时间，只有 30 分钟。</p>
+        <p class="pullquote">而在文明史上，自然语言完成同样幅度的变化，需要 <strong>500 年</strong>。<br><br>AI 时代真正的特征，<strong class="hl">不是技术加速，是认知加速</strong>。</p>
+        <p>你今天写笔记捕捉到的"动态理解" —— 它不是一种思维习惯，是 2026 年生存的必备能力。</p>
+        <blockquote>
+          <em>在流动的时代，最稳定的定义就是"它正在变化"。</em><br>
+          <em>而最稳定的智者，是那些<strong>记得每一次变化是怎么发生的人</strong>。</em>
+        </blockquote>
+
+        <div class="endmark">END · 2026.04.25</div>
+
+        <!-- References -->
+        <section id="refs" class="refs">
+          <h2>资料来源</h2>
+          <div class="refs-sub">本文构建在以下 13 篇一手文档与深度剖析之上。点击可跳转。</div>
+
+          <div class="refs-group">
+            <h4>一手文档</h4>
+            <ul>
+              <li><a href="https://www.anthropic.com/engineering/equipping-agents-for-the-real-world-with-agent-skills" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Anthropic: Equipping agents for the real world with Agent Skills</span><span class="ref-desc">Skills 官方设计哲学</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://www.anthropic.com/engineering/effective-context-engineering-for-ai-agents" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Anthropic: Effective Context Engineering for AI Agents</span><span class="ref-desc">Context Engineering 的官方阐述</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://platform.claude.com/docs/en/agents-and-tools/agent-skills/overview" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Claude API Docs: Agent Skills Overview</span><span class="ref-desc">技术规范</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://support.claude.com/en/articles/12512176-what-are-skills" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Claude Help Center: What are Skills?</span><span class="ref-desc">用户层面定义</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+            </ul>
+          </div>
+
+          <div class="refs-group">
+            <h4>深度剖析</h4>
+            <ul>
+              <li><a href="https://leehanchung.github.io/blogs/2025/10/26/claude-skills-deep-dive/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Lee Han Chung: Claude Agent Skills – A First Principles Deep Dive</span><span class="ref-desc">Skill 本质是 prompt 模板的论证</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://danielmiessler.com/blog/when-to-use-skills-vs-commands-vs-agents" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Daniel Miessler: When to Use Claude Code Skills vs Workflows vs Agents</span><span class="ref-desc">三胞胎边界辨析</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://www.humanlayer.dev/blog/skill-issue-harness-engineering-for-coding-agents" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">HumanLayer: Skill Issue – Harness Engineering for Coding Agents</span><span class="ref-desc">Harness 与 Skill 的层级关系</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+            </ul>
+          </div>
+
+          <div class="refs-group">
+            <h4>行业脉络</h4>
+            <ul>
+              <li><a href="https://thenewstack.io/agent-skills-anthropics-next-bid-to-define-ai-standards/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">The New Stack: Agent Skills – Anthropic's Next Bid to Define AI Standards</span><span class="ref-desc">标准化战略分析</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://siliconangle.com/2025/12/18/anthropic-makes-agent-skills-open-standard/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">SiliconANGLE: Anthropic makes agent Skills an open standard</span><span class="ref-desc">2025-12-18 开放标准的公告</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://venturebeat.com/technology/anthropic-launches-enterprise-agent-skills-and-opens-the-standard" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">VentureBeat: Anthropic launches enterprise Agent Skills</span><span class="ref-desc">企业层影响</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://thenewstack.io/ai-agents-or-skills-why-the-answer-is-both/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">The New Stack: AI Agents or Skills? Why the Answer Is 'Both'</span><span class="ref-desc">边界争论</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+            </ul>
+          </div>
+
+          <div class="refs-group">
+            <h4>Harness Engineering 概念群</h4>
+            <ul>
+              <li><a href="https://addyosmani.com/blog/agent-harness-engineering/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Addy Osmani: Agent Harness Engineering</span><span class="ref-desc">概念全景</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://atlan.com/know/harness-engineering-vs-prompt-engineering/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Atlan: Prompt vs Context vs Harness Engineering</span><span class="ref-desc">三层架构对比</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://parallel.ai/articles/what-is-an-agent-harness" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Parallel.ai: What is an agent harness</span><span class="ref-desc">Harness 定义</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+            </ul>
+          </div>
+
+          <div class="refs-group">
+            <h4>历史样本</h4>
+            <ul>
+              <li><a href="https://voicebot.ai/2017/05/22/now-55-microsoft-cortana-skills/" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Voicebot.ai: There Are Now 55 Microsoft Cortana Skills (2017)</span><span class="ref-desc">第一代 skill 化石</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+              <li><a href="https://techcommunity.microsoft.com/blog/modernworkappconsult/build-your-first-alexa-skill-with-alexa-net-and-azure-functions---the-basics/317930" target="_blank" rel="noopener" class="ref-card">
+                <span class="ref-icon" aria-hidden="true"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg></span>
+                <span class="ref-text"><span class="ref-title">Microsoft: Build your first Alexa skill</span><span class="ref-desc">REST endpoint 本质的技术原貌</span></span>
+                <span class="ref-arrow" aria-hidden="true">→</span>
+              </a></li>
+            </ul>
+          </div>
+        </section>
+
+        <div style="text-align:center; margin-top: 60px; padding-top: 40px; border-top: 1px solid #1F2937;">
+          <a href="../blog.html" style="display:inline-flex; align-items:center; gap:8px; padding: 10px 22px; background: transparent; border: 1px solid #1F2937; border-radius: 999px; color: #E5E7EB; font-weight: 500; font-size: 14px; text-decoration: none; transition: all .2s ease;" onmouseover="this.style.color='#60A5FA';this.style.borderColor='rgba(96,165,250,.5)';this.style.background='rgba(96,165,250,.06)'" onmouseout="this.style.color='#E5E7EB';this.style.borderColor='#1F2937';this.style.background='transparent'">
+            ← 回到博客列表
+          </a>
+        </div>
+
+      </main>
+    </div>
+  </article>
+
+  <script>
+    // Reading progress bar
+    (function() {
+      const bar = document.getElementById('readProgress');
+      function update() {
+        const h = document.documentElement;
+        const max = h.scrollHeight - h.clientHeight;
+        const pct = max > 0 ? (h.scrollTop / max) * 100 : 0;
+        bar.style.width = pct + '%';
+      }
+      window.addEventListener('scroll', update, { passive: true });
+      update();
+    })();
+
+    // TOC active highlight on scroll
+    (function() {
+      const links = [...document.querySelectorAll('.toc a[href^="#"]')];
+      if (!links.length) return;
+      const sections = links.map(a => document.querySelector(a.getAttribute('href'))).filter(Boolean);
+      const obs = new IntersectionObserver((entries) => {
+        entries.forEach(en => {
+          if (en.isIntersecting) {
+            links.forEach(l => l.classList.remove('active'));
+            const link = links.find(l => l.getAttribute('href') === '#' + en.target.id);
+            if (link) link.classList.add('active');
+          }
+        });
+      }, { rootMargin: '-30% 0px -60% 0px' });
+      sections.forEach(s => obs.observe(s));
+    })();
+
+    // TOC chapter collapse/expand (only on caret click — link still navigates)
+    (function() {
+      document.querySelectorAll('.toc-section[data-collapsible="true"] .toc-chapter').forEach(chap => {
+        const caret = chap.querySelector('.caret');
+        if (!caret) return;
+        // Click on caret toggles collapse; click on rest of chapter still navigates
+        caret.addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          const section = chap.closest('.toc-section');
+          const collapsed = section.classList.toggle('collapsed');
+          chap.classList.toggle('collapsed', collapsed);
+        });
+      });
+    })();
+  </script>
+</body>
+</html>

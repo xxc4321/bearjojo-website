@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="博客 - BearJojo 的不定期长文：AI 概念、零售认知、工具反思。" />
+  <meta name="author" content="BearJojo" />
+  <meta name="theme-color" content="#131a2b" media="(prefers-color-scheme: dark)" />
+  <meta name="theme-color" content="#D9D2C5" media="(prefers-color-scheme: light)" />
+
+  <meta property="og:title" content="博客 | BearJojo" />
+  <meta property="og:description" content="不定期长文：AI 概念、零售认知、工具反思。" />
+  <meta property="og:type" content="website" />
+  <meta property="og:locale" content="zh_CN" />
+
+  <title>博客 | BearJojo</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="index.css?v=1.2" />
+  <style>
+    .post-list { max-width: 1100px; margin: 0 auto; display: flex; flex-direction: column; gap: var(--spacing-xl); }
+    .post-card {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 32px;
+      align-items: stretch;
+      padding: 0;
+      overflow: hidden;
+      text-decoration: none;
+      color: inherit;
+      transition: transform .4s cubic-bezier(.22,.61,.36,1), border-color .3s ease, box-shadow .4s ease;
+    }
+    .post-card:hover { transform: translateY(-4px); border-color: rgba(124,58,237,.5); box-shadow: 0 24px 60px -22px rgba(124,58,237,.45); }
+    .post-cover {
+      position: relative;
+      min-height: 240px;
+      background:
+        radial-gradient(1000px 500px at 30% 30%, rgba(124,58,237,.55), transparent 60%),
+        radial-gradient(800px 400px at 80% 80%, rgba(0,245,255,.3), transparent 60%),
+        radial-gradient(700px 350px at 60% 100%, rgba(255,0,255,.35), transparent 60%),
+        #0d1117;
+      overflow: hidden;
+    }
+    .post-cover::before {
+      content: '';
+      position: absolute; inset: 0;
+      background-image:
+        linear-gradient(rgba(0,245,255,.07) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0,245,255,.07) 1px, transparent 1px);
+      background-size: 36px 36px;
+      mix-blend-mode: screen;
+    }
+    .post-cover-text {
+      position: absolute;
+      bottom: 18px; left: 22px; right: 22px;
+      z-index: 2;
+      font-family: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+      font-size: 11px;
+      letter-spacing: .14em;
+      color: rgba(255,255,255,.78);
+      display: flex; flex-direction: column; gap: 4px;
+    }
+    .post-cover-text .word {
+      font-size: 38px;
+      font-weight: 800;
+      letter-spacing: -.01em;
+      line-height: 1;
+      font-family: 'Inter', sans-serif;
+    }
+    .post-cover-text .word.fade1 { color: rgba(255,255,255,.18); }
+    .post-cover-text .word.fade2 { color: rgba(124,58,237,.55); }
+    .post-cover-text .word.fade3 {
+      background: linear-gradient(135deg, #00f5ff 0%, #ff00ff 100%);
+      -webkit-background-clip: text; background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .post-body { padding: 28px 32px 28px 0; display: flex; flex-direction: column; gap: 12px; }
+    .post-meta-top { display: flex; align-items: center; gap: 12px; flex-wrap: wrap; font-size: 12px; }
+    .post-tag-badge {
+      padding: 3px 10px; border-radius: 999px;
+      background: rgba(124,58,237,.14);
+      color: #c4b5fd;
+      border: 1px solid rgba(124,58,237,.3);
+      font-weight: 600; letter-spacing: .04em;
+    }
+    .post-meta-row { color: var(--color-text-tertiary); display: flex; gap: 8px; }
+    .post-title { font-size: clamp(22px, 2.4vw, 30px); font-weight: 800; color: var(--color-text-primary); line-height: 1.3; letter-spacing: -.005em; }
+    .post-subtitle { font-size: 15px; color: var(--color-primary-light); font-weight: 500; }
+    .post-excerpt { font-size: 15px; color: var(--color-text-secondary); line-height: 1.7; flex: 1; }
+    .post-foot { display: flex; align-items: center; justify-content: space-between; gap: 14px; margin-top: 8px; padding-top: 14px; border-top: 1px solid var(--color-border); }
+    .post-foot-tags { display: flex; gap: 6px; flex-wrap: wrap; }
+    .post-foot-tag { font-size: 11px; color: var(--color-text-tertiary); padding: 2px 8px; border: 1px solid var(--color-border); border-radius: 999px; }
+    .post-cta { font-size: 14px; font-weight: 600; color: var(--color-primary); display: inline-flex; align-items: center; gap: 6px; transition: gap .3s ease; }
+    .post-card:hover .post-cta { gap: 12px; }
+
+    @media (max-width: 760px) {
+      .post-card { grid-template-columns: 1fr; }
+      .post-cover { min-height: 180px; }
+      .post-body { padding: 22px 24px 24px; }
+    }
+  </style>
+</head>
+<body>
+  <a href="#main-content" class="skip-link">跳转到主要内容</a>
+  <div class="container">
+    <header role="banner">
+      <nav class="header-nav" role="navigation" aria-label="主导航">
+        <div class="logo" aria-label="BearJojo 个人网站">BearJojo</div>
+        <div class="nav-menu">
+          <a href="index.html" class="nav-link">主页</a>
+          <a href="skills.html" class="nav-link">小技能</a>
+          <a href="blog.html" class="nav-link active">博客</a>
+          <a href="ai-diary.html" class="nav-link">AI日记</a>
+          <a href="daily-news.html" class="nav-link">每日资讯</a>
+        </div>
+        <button class="theme-toggle" id="themeToggle" aria-label="切换主题" aria-pressed="false" title="切换日间/夜间模式">
+          <span id="themeIcon" aria-hidden="true">🌙</span>
+        </button>
+      </nav>
+    </header>
+
+    <main id="main-content" class="content" role="main">
+      <div class="page-header" style="text-align:center; padding: var(--spacing-3xl) var(--spacing-lg); max-width: 820px; margin: 0 auto var(--spacing-2xl);">
+        <h1 class="page-title" style="font-size: var(--font-size-5xl); font-weight: 800; margin-bottom: var(--spacing-md);">📝 博客</h1>
+        <p class="page-subtitle" style="font-size: var(--font-size-xl); color: var(--color-text-secondary); line-height: var(--line-height-normal);">
+          不定期更新的长文。<br>
+          AI 概念辨析、零售认知、工具反思。
+        </p>
+      </div>
+
+      <div class="post-list">
+
+        <a href="blog/ai-skill-folder.html" class="card post-card">
+          <div class="post-cover" aria-hidden="true">
+            <div class="post-cover-text">
+              <span class="word fade1">skill</span>
+              <span class="word fade2">skill</span>
+              <span class="word fade3">skill</span>
+              <span style="margin-top:6px">10 YEARS · 3 MEANINGS</span>
+            </div>
+          </div>
+          <div class="post-body">
+            <div class="post-meta-top">
+              <span class="post-tag-badge">深度调研</span>
+              <span class="post-meta-row"><span>2026.04.25</span><span>·</span><span>约 18 分钟</span><span>·</span><span>Bearjojo &amp; ClaudeCode</span></span>
+            </div>
+            <h2 class="post-title">你说的"AI 技能"，其实是个文件夹</h2>
+            <p class="post-subtitle">从 Alexa Skills 到 Anthropic Skills，十年间 "skill" 这个词被悄悄改写了三次。</p>
+            <p class="post-excerpt">
+              字典里的 skill 是<strong style="color:var(--color-text-primary)">人</strong>的属性。但在 AI 领域，
+              这个词被三次借尸还魂：2014 年是 REST 端点，2023 年是 function calling，2025 年是渐进式披露的文件夹。
+              这篇报告解剖每一次偷换的真相 —— 也解释为什么"开放标准"是最封闭的事。
+            </p>
+            <div class="post-foot">
+              <div class="post-foot-tags">
+                <span class="post-foot-tag">概念边界</span>
+                <span class="post-foot-tag">Anthropic</span>
+                <span class="post-foot-tag">Skill / Prompt / Harness</span>
+                <span class="post-foot-tag">语言演化</span>
+              </div>
+              <span class="post-cta">阅读全文 →</span>
+            </div>
+          </div>
+        </a>
+
+      </div>
+
+      <div style="max-width:780px;margin:var(--spacing-3xl) auto var(--spacing-3xl);text-align:center;padding:var(--spacing-2xl); color: var(--color-text-tertiary); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed);">
+        ✨ 不定期更新。下一篇可能是关于零售认知、工具滥用，或别的什么 —— 看灵感先到哪里。
+      </div>
+
+    </main>
+
+    <script src="index.js"></script>
+  </div>
+</body>
+</html>
