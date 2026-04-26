@@ -1155,9 +1155,40 @@
 /* ========================================================
    CONVERSION (Slide 16)
    ======================================================== */
-.slide-convert .oc-h2{margin-bottom:10px}
+.slide-convert .oc-h2{margin:0 0 12px;max-width:920px}
 .slide-convert{position:relative}
-.slide-convert .oc-sub-sm{margin-top:0;opacity:.78}
+.slide-convert .oc-sub-sm{margin:0 0 10px;opacity:.78}
+.slide-convert .af-convert-head{
+  width:100%;
+  max-width:1120px;
+  margin:6px auto 0;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  text-align:center;
+}
+.slide-convert .af-convert-note{
+  margin:0 0 16px;
+  max-width:860px;
+  font-size:13px;
+  line-height:1.55;
+  color:rgba(139,148,158,.92);
+}
+.slide-convert .af-gh-btn{
+  height:40px;
+  padding:0 14px;
+  border-color:rgba(88,166,255,.24);
+  background:rgba(33,38,45,.35);
+  box-shadow:0 12px 30px rgba(0,0,0,.32);
+}
+.slide-convert .af-gh-btn:hover{
+  border-color:rgba(88,166,255,.48);
+  background:rgba(33,38,45,.55);
+  transform:translateY(-1px);
+}
+.slide-convert .af-gh-btn:active{transform:translateY(1px)}
+.slide-convert .af-gh-btn .af-ico{display:inline-flex;align-items:center}
+.slide-convert .af-gh-btn .af-ext{opacity:.75}
 .slide-convert .af-gh-link{
   position:absolute;
   top:22px;
@@ -1204,29 +1235,35 @@
 
 .slide-convert .af-convert-grid{
   width:100%;
-  max-width:var(--content-max);
-  margin-top:18px;
+  max-width:1120px;
+  margin-top:26px;
   display:grid;
   grid-template-columns:1fr 1fr;
-  gap:var(--stack-gap);
+  gap:32px;
   align-items:stretch;
 }
+.slide-convert .af-skill-col{position:relative;display:flex}
+.slide-convert .af-skill-col .af-skill-card{width:100%}
 .slide-convert .af-skill-card{
-  background:var(--oc-surface);
-  border:1px solid var(--oc-border);
-  border-radius:14px;
-  padding:16px 16px 16px;
+  background:rgba(255,255,255,.03);
+  border:1px solid rgba(255,255,255,.06);
+  border-radius:18px;
+  padding:18px 18px 18px;
   text-align:left;
-  box-shadow:0 16px 40px rgba(0,0,0,.35);
+  box-shadow:0 18px 46px rgba(0,0,0,.40);
   overflow:hidden;
   transition:transform .25s cubic-bezier(.2,.9,.2,1), border-color .25s ease, box-shadow .25s ease;
 }
 .slide-convert .af-skill-card:hover{
   transform:translateY(-4px);
-  border-color:rgba(168,85,247,.45);
-  box-shadow:0 20px 54px rgba(0,0,0,.45), 0 0 0 1px rgba(168,85,247,.10) inset;
+  border-color:rgba(88,166,255,.50);
+  box-shadow:0 24px 60px rgba(0,0,0,.50), 0 0 0 1px rgba(88,166,255,.12) inset;
 }
 .slide-convert .af-reco{
+  position:absolute;
+  top:0;
+  left:18px;
+  transform:translateY(-50%);
   width:fit-content;
   font-size:11px;
   font-weight:800;
@@ -1234,10 +1271,11 @@
   text-transform:uppercase;
   padding:6px 10px;
   border-radius:999px;
-  color:var(--oc-accent3);
-  border:1px solid rgba(168,85,247,.28);
-  background:rgba(124,58,237,.12);
-  margin-bottom:12px;
+  color:rgba(200,210,222,.92);
+  border:1px solid rgba(88,166,255,.24);
+  background:rgba(33,38,45,.55);
+  box-shadow:0 12px 30px rgba(0,0,0,.35);
+  pointer-events:none;
 }
 .slide-convert .af-skill-head{
   display:flex;
@@ -1299,9 +1337,8 @@
 
 .slide-convert .af-code{
   margin:0;
-  max-width:720px;
-  margin-left:auto;
-  margin-right:auto;
+  width:100%;
+  max-width:none;
   border-radius:12px;
   border:1px solid rgba(48,54,61,.95);
   background:#010409;
@@ -1309,13 +1346,13 @@
   font-family:'JetBrains Mono',monospace;
   font-size:11px;
   line-height:1.6;
-  padding:12px 12px 12px 34px;
+  padding:14px 14px 14px 38px;
   overflow:auto;
   scrollbar-gutter:stable both-edges;
 }
 .slide-convert .af-code code{white-space:pre;display:block;min-width:fit-content}
 .slide-convert .af-code.is-collapsible{
-  max-height:calc(1.6em * 9 + 24px);
+  max-height:calc(1.6em * 10 + 28px);
   overflow:auto;
   position:relative;
 }
@@ -1343,8 +1380,8 @@
   height:44px;
   margin-top:12px;
   border-radius:12px;
-  border:1px solid rgba(168,85,247,.35);
-  background:linear-gradient(135deg,rgba(124,58,237,.18),rgba(88,166,255,.10));
+  border:1px solid rgba(88,166,255,.35);
+  background:rgba(11,14,19,.72);
   color:var(--oc-text);
   font-weight:800;
   font-size:14px;
@@ -1353,12 +1390,14 @@
   justify-content:center;
   gap:10px;
   cursor:pointer;
+  position:relative;
+  z-index:2;
   transition:transform .2s cubic-bezier(.2,.9,.2,1), box-shadow .2s ease, border-color .2s ease;
 }
 .slide-convert .af-use-btn:hover{
   transform:translateY(-1px) scale(1.01);
-  border-color:rgba(168,85,247,.55);
-  box-shadow:0 18px 44px rgba(0,0,0,.35), 0 0 28px rgba(168,85,247,.16);
+  border-color:rgba(88,166,255,.55);
+  box-shadow:0 18px 44px rgba(0,0,0,.40), 0 0 22px rgba(88,166,255,.12);
 }
 .slide-convert .af-use-btn:active{transform:translateY(0) scale(.99)}
 .slide-convert .af-use-btn[data-state="copied"]{
@@ -1367,14 +1406,33 @@
   box-shadow:0 0 0 1px rgba(63,185,80,.16) inset, 0 18px 44px rgba(63,185,80,.10);
 }
 
+.slide-convert .af-cta-area{
+  width:100%;
+  max-width:1120px;
+  margin-top:22px;
+  padding:0;
+  border-radius:0;
+  border:none;
+  background:transparent;
+  box-shadow:none;
+  display:flex;
+  justify-content:center;
+}
+.slide-convert .af-cta-text{
+  font-size:14px;
+  font-weight:800;
+  letter-spacing:.01em;
+  color:rgba(139,148,158,.95);
+  text-align:center;
+  max-width:720px;
+}
 .slide-convert .af-main-cta{
   width:100%;
-  max-width:720px;
+  max-width:580px;
   height:48px;
-  margin-top:18px;
   border-radius:14px;
-  border:1px solid rgba(168,85,247,.35);
-  background:linear-gradient(135deg,rgba(63,185,80,.16),rgba(124,58,237,.10));
+  border:1px solid rgba(88,166,255,.28);
+  background:rgba(33,38,45,.50);
   color:var(--oc-text);
   font-weight:900;
   font-size:15px;
@@ -1383,8 +1441,8 @@
 }
 .slide-convert .af-main-cta:hover{
   transform:translateY(-1px) scale(1.01);
-  border-color:rgba(63,185,80,.55);
-  box-shadow:0 18px 44px rgba(0,0,0,.35), 0 0 36px rgba(63,185,80,.10);
+  border-color:rgba(88,166,255,.45);
+  box-shadow:0 18px 44px rgba(0,0,0,.40), 0 0 24px rgba(88,166,255,.10);
 }
 .slide-convert .af-main-cta:active{transform:translateY(0) scale(.99)}
 
@@ -1415,6 +1473,7 @@
   .slide-convert .af-code{max-height:calc(1.6em * 8 + 22px)}
   .slide-convert .af-use-btn{width:100%}
   .slide-convert .af-main-cta{width:100%}
+  .slide-convert .af-reco{left:14px}
 }
 
 /* ========================================================
